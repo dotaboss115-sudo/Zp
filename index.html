@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE  html>
 
 <html lang="ru">
 <head>
@@ -319,77 +319,84 @@
 
 <div class="toast" id="toast"></div>
 
+
 <script>
-```
-
-const MO=[‘Январь’,‘Февраль’,‘Март’,‘Апрель’,‘Май’,‘Июнь’,‘Июль’,‘Август’,‘Сентябрь’,‘Октябрь’,‘Ноябрь’,‘Декабрь’];
-const LB={vm:‘ВМ’,vo:‘ВО’,road:‘Д’,vacation:‘ОТ’,hospital:‘Б’,holiday:‘П’};
+const MO=["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+const LB={vm:"ВМ",vo:"ВО",road:"Д",vacation:"ОТ",hospital:"Б",holiday:"П"};
 const DEF={hourly:187.94,hours:11,vahta:700,vahtaEx:100,region:70,percent:50,zone:10,exp:30,ndfl:13,roadH:8,bonus:17857};
-let S={…DEF},st={calY:2025,calM:11,selDay:null,period:‘current’,withBonus:true},sch={};
+let S={...DEF},st={calY:2025,calM:11,selDay:null,period:"current",withBonus:true},sch={};
 
-function getDefSch(){return{2025:{12:{1:‘vm’,2:‘vm’,3:‘vm’,4:‘vm’,5:‘vm’,6:‘vm’,7:‘vm’,8:‘vm’,9:‘road’,10:‘vo’,11:‘vo’,12:‘vo’,13:‘vo’,14:‘vo’,15:‘vo’,16:‘vo’,17:‘vo’,18:‘road’,19:‘vm’,20:‘vm’,21:‘vm’,22:‘vm’,23:‘vm’,24:‘vm’,25:‘vm’,26:‘vm’,27:‘vm’,28:‘vm’,29:‘vm’,30:‘vm’,31:‘holiday’}},2026:{1:{1:‘holiday’,2:‘holiday’,3:‘holiday’,4:‘holiday’,5:‘holiday’,6:‘holiday’,7:‘holiday’,8:‘holiday’,9:‘road’,10:‘vo’,11:‘vo’,12:‘vo’,13:‘vo’,14:‘vo’,15:‘vo’,16:‘vo’,17:‘vo’,18:‘vo’,19:‘vo’,20:‘vo’,21:‘vo’,22:‘vo’,23:‘vo’,24:‘vo’,25:‘vo’,26:‘vo’,27:‘vo’,28:‘vo’,29:‘vo’,30:‘vo’,31:‘vo’},2:{1:‘vo’,2:‘vo’,3:‘vo’,4:‘vo’,5:‘vo’,6:‘vo’,7:‘vo’,8:‘vo’,9:‘road’,10:‘vm’,11:‘vm’,12:‘vm’,13:‘vm’,14:‘vm’,15:‘vm’,16:‘vm’,17:‘vm’,18:‘vm’,19:‘vm’,20:‘vm’,21:‘vm’,22:‘vm’,23:‘holiday’,24:‘vm’,25:‘vm’,26:‘vm’,27:‘vm’,28:‘vm’},3:{1:‘vm’,2:‘vm’,3:‘vm’,4:‘vm’,5:‘vm’,6:‘vm’,7:‘vm’,8:‘holiday’,9:‘road’,10:‘vo’,11:‘vo’,12:‘vo’,13:‘vo’,14:‘vo’,15:‘vo’,16:‘vo’,17:‘vo’,18:‘vo’,19:‘vo’,20:‘vo’,21:‘vo’,22:‘vo’,23:‘vo’,24:‘vo’,25:‘vo’,26:‘vo’,27:‘vo’,28:‘vo’,29:‘vo’,30:‘vo’,31:‘vo’},4:{1:‘vo’,2:‘vo’,3:‘vo’,4:‘vo’,5:‘vo’,6:‘vo’,7:‘vo’,8:‘vo’,9:‘road’,10:‘vm’,11:‘vm’,12:‘vm’,13:‘vm’,14:‘vm’,15:‘vm’,16:‘vm’,17:‘vm’,18:‘vm’,19:‘vm’,20:‘vm’,21:‘vm’,22:‘vm’,23:‘vm’,24:‘vm’,25:‘vm’,26:‘vm’,27:‘vm’,28:‘vm’,29:‘vm’,30:‘vm’},5:{1:‘holiday’,2:‘vm’,3:‘vm’,4:‘vm’,5:‘vm’,6:‘vm’,7:‘vm’,8:‘vm’,9:‘holiday’,10:‘vm’,11:‘vm’,12:‘vm’,13:‘vm’,14:‘vm’,15:‘vm’,16:‘road’,17:‘vo’,18:‘vo’,19:‘vo’,20:‘vo’,21:‘vo’,22:‘vo’,23:‘vo’,24:‘vo’,25:‘vo’,26:‘vo’,27:‘vo’,28:‘vo’,29:‘vo’,30:‘vo’,31:‘vo’},6:{1:‘vo’,2:‘vo’,3:‘vo’,4:‘vo’,5:‘vo’,6:‘vo’,7:‘vo’,8:‘vacation’,9:‘vacation’,10:‘vacation’,11:‘vacation’,12:‘vacation’,13:‘vacation’,14:‘vacation’,15:‘vacation’,16:‘vacation’,17:‘vacation’,18:‘vacation’,19:‘vacation’,20:‘vacation’,21:‘vacation’,22:‘vacation’,23:‘vacation’,24:‘vacation’,25:‘vacation’,26:‘vacation’,27:‘vacation’,28:‘vacation’,29:‘vacation’,30:‘vacation’},7:{1:‘vacation’,2:‘vacation’,3:‘vacation’,4:‘vacation’,5:‘vacation’,6:‘vacation’,7:‘vacation’,8:‘vacation’,9:‘vo’,10:‘vo’,11:‘vo’,12:‘vo’,13:‘vo’,14:‘vo’,15:‘vo’,16:‘vo’,17:‘vo’,18:‘vo’,19:‘vo’,20:‘vo’,21:‘vo’,22:‘vo’,23:‘vo’,24:‘vo’,25:‘vo’,26:‘vo’,27:‘vo’,28:‘vo’,29:‘vo’,30:‘vo’,31:‘vo’},8:{1:‘vo’,2:‘vo’,3:‘vo’,4:‘vo’,5:‘vo’,6:‘vo’,7:‘vo’,8:‘vo’,9:‘road’,10:‘vm’,11:‘vm’,12:‘vm’,13:‘vm’,14:‘vm’,15:‘vm’,16:‘vm’,17:‘vm’,18:‘vm’,19:‘vm’,20:‘vm’,21:‘vm’,22:‘vm’,23:‘vm’,24:‘vm’,25:‘vm’,26:‘vm’,27:‘vm’,28:‘vm’,29:‘vm’,30:‘vm’,31:‘vm’},9:{1:‘vm’,2:‘vm’,3:‘vm’,4:‘vm’,5:‘vm’,6:‘vm’,7:‘vm’,8:‘vm’,9:‘road’,10:‘vm’,11:‘vm’,12:‘vm’,13:‘vm’,14:‘vm’,15:‘vm’,16:‘vm’,17:‘vm’,18:‘vm’,19:‘road’,20:‘vo’,21:‘vo’,22:‘vo’,23:‘vo’,24:‘vo’,25:‘vo’,26:‘vo’,27:‘vo’,28:‘vo’,29:‘vo’,30:‘vo’},10:{1:‘vo’,2:‘vo’,3:‘vo’,4:‘vo’,5:‘vo’,6:‘vo’,7:‘vo’,8:‘vo’,9:‘vo’,10:‘vo’,11:‘vo’,12:‘vo’,13:‘vo’,14:‘vo’,15:‘vo’,16:‘vo’,17:‘vo’,18:‘vo’,19:‘vo’,20:‘vo’,21:‘vo’,22:‘vo’,23:‘vo’,24:‘vo’,25:‘vo’,26:‘vo’,27:‘vo’,28:‘vo’,29:‘vo’,30:‘road’,31:‘vm’},11:{1:‘vm’,2:‘vm’,3:‘vm’,4:‘holiday’,5:‘vm’,6:‘vm’,7:‘vm’,8:‘vm’,9:‘vm’,10:‘vm’,11:‘vm’,12:‘vm’,13:‘vm’,14:‘vm’,15:‘vm’,16:‘vm’,17:‘vm’,18:‘vm’,19:‘vm’,20:‘vm’,21:‘vm’,22:‘vm’,23:‘vm’,24:‘vm’,25:‘vm’,26:‘vm’,27:‘vm’,28:‘vm’,29:‘vm’,30:‘road’},12:{1:‘vm’,2:‘vm’,3:‘vm’,4:‘vm’,5:‘vm’,6:‘vm’,7:‘vm’,8:‘vm’,9:‘road’,10:‘vo’,11:‘vo’,12:‘vo’,13:‘vo’,14:‘vo’,15:‘vo’,16:‘vo’,17:‘vo’,18:‘vo’,19:‘vo’,20:‘vo’,21:‘vo’,22:‘vo’,23:‘vo’,24:‘vo’,25:‘vo’,26:‘vo’,27:‘vo’,28:‘vo’,29:‘vo’,30:‘vo’,31:‘vo’}}};}
-function loadSch(){const s=localStorage.getItem(‘vsch2’);sch=s?JSON.parse(s):getDefSch();}
-function saveSch(){localStorage.setItem(‘vsch2’,JSON.stringify(sch));}
+function getDefSch(){return{2025:{12:{1:"vm",2:"vm",3:"vm",4:"vm",5:"vm",6:"vm",7:"vm",8:"vm",9:"road",10:"vo",11:"vo",12:"vo",13:"vo",14:"vo",15:"vo",16:"vo",17:"vo",18:"road",19:"vm",20:"vm",21:"vm",22:"vm",23:"vm",24:"vm",25:"vm",26:"vm",27:"vm",28:"vm",29:"vm",30:"vm",31:"holiday"}},2026:{1:{1:"holiday",2:"holiday",3:"holiday",4:"holiday",5:"holiday",6:"holiday",7:"holiday",8:"holiday",9:"road",10:"vo",11:"vo",12:"vo",13:"vo",14:"vo",15:"vo",16:"vo",17:"vo",18:"vo",19:"vo",20:"vo",21:"vo",22:"vo",23:"vo",24:"vo",25:"vo",26:"vo",27:"vo",28:"vo",29:"vo",30:"vo",31:"vo"},2:{1:"vo",2:"vo",3:"vo",4:"vo",5:"vo",6:"vo",7:"vo",8:"vo",9:"road",10:"vm",11:"vm",12:"vm",13:"vm",14:"vm",15:"vm",16:"vm",17:"vm",18:"vm",19:"vm",20:"vm",21:"vm",22:"vm",23:"holiday",24:"vm",25:"vm",26:"vm",27:"vm",28:"vm"},3:{1:"vm",2:"vm",3:"vm",4:"vm",5:"vm",6:"vm",7:"vm",8:"holiday",9:"road",10:"vo",11:"vo",12:"vo",13:"vo",14:"vo",15:"vo",16:"vo",17:"vo",18:"vo",19:"vo",20:"vo",21:"vo",22:"vo",23:"vo",24:"vo",25:"vo",26:"vo",27:"vo",28:"vo",29:"vo",30:"vo",31:"vo"},4:{1:"vo",2:"vo",3:"vo",4:"vo",5:"vo",6:"vo",7:"vo",8:"vo",9:"road",10:"vm",11:"vm",12:"vm",13:"vm",14:"vm",15:"vm",16:"vm",17:"vm",18:"vm",19:"vm",20:"vm",21:"vm",22:"vm",23:"vm",24:"vm",25:"vm",26:"vm",27:"vm",28:"vm",29:"vm",30:"vm"},5:{1:"holiday",2:"vm",3:"vm",4:"vm",5:"vm",6:"vm",7:"vm",8:"vm",9:"holiday",10:"vm",11:"vm",12:"vm",13:"vm",14:"vm",15:"vm",16:"road",17:"vo",18:"vo",19:"vo",20:"vo",21:"vo",22:"vo",23:"vo",24:"vo",25:"vo",26:"vo",27:"vo",28:"vo",29:"vo",30:"vo",31:"vo"},6:{1:"vo",2:"vo",3:"vo",4:"vo",5:"vo",6:"vo",7:"vo",8:"vacation",9:"vacation",10:"vacation",11:"vacation",12:"vacation",13:"vacation",14:"vacation",15:"vacation",16:"vacation",17:"vacation",18:"vacation",19:"vacation",20:"vacation",21:"vacation",22:"vacation",23:"vacation",24:"vacation",25:"vacation",26:"vacation",27:"vacation",28:"vacation",29:"vacation",30:"vacation"},7:{1:"vacation",2:"vacation",3:"vacation",4:"vacation",5:"vacation",6:"vacation",7:"vacation",8:"vacation",9:"vo",10:"vo",11:"vo",12:"vo",13:"vo",14:"vo",15:"vo",16:"vo",17:"vo",18:"vo",19:"vo",20:"vo",21:"vo",22:"vo",23:"vo",24:"vo",25:"vo",26:"vo",27:"vo",28:"vo",29:"vo",30:"vo",31:"vo"},8:{1:"vo",2:"vo",3:"vo",4:"vo",5:"vo",6:"vo",7:"vo",8:"vo",9:"road",10:"vm",11:"vm",12:"vm",13:"vm",14:"vm",15:"vm",16:"vm",17:"vm",18:"vm",19:"vm",20:"vm",21:"vm",22:"vm",23:"vm",24:"vm",25:"vm",26:"vm",27:"vm",28:"vm",29:"vm",30:"vm",31:"vm"},9:{1:"vm",2:"vm",3:"vm",4:"vm",5:"vm",6:"vm",7:"vm",8:"vm",9:"road",10:"vm",11:"vm",12:"vm",13:"vm",14:"vm",15:"vm",16:"vm",17:"vm",18:"vm",19:"road",20:"vo",21:"vo",22:"vo",23:"vo",24:"vo",25:"vo",26:"vo",27:"vo",28:"vo",29:"vo",30:"vo"},10:{1:"vo",2:"vo",3:"vo",4:"vo",5:"vo",6:"vo",7:"vo",8:"vo",9:"vo",10:"vo",11:"vo",12:"vo",13:"vo",14:"vo",15:"vo",16:"vo",17:"vo",18:"vo",19:"vo",20:"vo",21:"vo",22:"vo",23:"vo",24:"vo",25:"vo",26:"vo",27:"vo",28:"vo",29:"vo",30:"road",31:"vm"},11:{1:"vm",2:"vm",3:"vm",4:"holiday",5:"vm",6:"vm",7:"vm",8:"vm",9:"vm",10:"vm",11:"vm",12:"vm",13:"vm",14:"vm",15:"vm",16:"vm",17:"vm",18:"vm",19:"vm",20:"vm",21:"vm",22:"vm",23:"vm",24:"vm",25:"vm",26:"vm",27:"vm",28:"vm",29:"vm",30:"road"},12:{1:"vm",2:"vm",3:"vm",4:"vm",5:"vm",6:"vm",7:"vm",8:"vm",9:"road",10:"vo",11:"vo",12:"vo",13:"vo",14:"vo",15:"vo",16:"vo",17:"vo",18:"vo",19:"vo",20:"vo",21:"vo",22:"vo",23:"vo",24:"vo",25:"vo",26:"vo",27:"vo",28:"vo",29:"vo",30:"vo",31:"vo"}}};}
+
+function loadSch(){const s=localStorage.getItem("vsch2");sch=s?JSON.parse(s):getDefSch();}
+function saveSch(){localStorage.setItem("vsch2",JSON.stringify(sch));}
 function getSt(y,m,d){return sch[y]?.[m]?.[d]||null;}
-function setSt(y,m,d,v){if(!sch[y])sch[y]={};if(!sch[y][m])sch[y][m]={};if(v===‘clear’)delete sch[y][m][d];else sch[y][m][d]=v;saveSch();}
+function setSt(y,m,d,v){if(!sch[y])sch[y]={};if(!sch[y][m])sch[y][m]={};if(v==="clear")delete sch[y][m][d];else sch[y][m][d]=v;saveSch();}
 
 function calcDay(hrs,isHol,withB){
-const base=S.hourly*hrs;
-const region=base*(S.region/100);
-const percent=base*(S.percent/100);
-const zone=base*(S.zone/100);
-const exp=base*(S.exp/100);
-const vahta=S.vahta;
-const vahtaEx=S.vahtaEx;
-const holEx=isHol?base:0;
-const bonus=withB?(S.bonus/23):0;
-const gross=base+region+percent+zone+exp+vahta+vahtaEx+holEx+bonus;
-const ndfl=gross*(S.ndfl/100);
-return{base,region,percent,zone,exp,vahta,vahtaEx,holEx,bonus,gross,ndfl,net:gross-ndfl,hrs};
+  const base=S.hourly*hrs;
+  const region=base*(S.region/100);
+  const percent=base*(S.percent/100);
+  const zone=base*(S.zone/100);
+  const exp=base*(S.exp/100);
+  const vahta=S.vahta;
+  const vahtaEx=S.vahtaEx;
+  const holEx=isHol?base:0;
+  const bonus=withB?(S.bonus/23):0;
+  const gross=base+region+percent+zone+exp+vahta+vahtaEx+holEx+bonus;
+  const ndfl=gross*(S.ndfl/100);
+  return{base,region,percent,zone,exp,vahta,vahtaEx,holEx,bonus,gross,ndfl,net:gross-ndfl,hrs};
 }
 function calcRoad(){
-const hrs=S.roadH;
-const base=S.hourly*hrs;
-const region=base*(S.region/100);
-const percent=base*(S.percent/100);
-const zone=base*(S.zone/100);
-const exp=base*(S.exp/100);
-const gross=base+region+percent+zone+exp;
-const ndfl=gross*(S.ndfl/100);
-return{base,region,percent,zone,exp,gross,ndfl,net:gross-ndfl,hrs};
+  const hrs=S.roadH;
+  const base=S.hourly*hrs;
+  const region=base*(S.region/100);
+  const percent=base*(S.percent/100);
+  const zone=base*(S.zone/100);
+  const exp=base*(S.exp/100);
+  const gross=base+region+percent+zone+exp;
+  const ndfl=gross*(S.ndfl/100);
+  return{base,region,percent,zone,exp,gross,ndfl,net:gross-ndfl,hrs};
 }
+
 function calcPeriod(start,end,withB){
-let r={workDays:0,roadDays:0,holidays:0,hours:0,base:0,region:0,percent:0,zone:0,exp:0,vahta:0,vahtaEx:0,holEx:0,bonus:0,road:0,gross:0,ndfl:0,net:0};
-const cur=new Date(start);
-while(cur<=end){
-const y=cur.getFullYear(),m=cur.getMonth()+1,d=cur.getDate();
-const s=getSt(y,m,d);
-if(s===‘vm’){r.workDays++;const day=calcDay(S.hours,false,withB);r.hours+=day.hrs;r.base+=day.base;r.region+=day.region;r.percent+=day.percent;r.zone+=day.zone;r.exp+=day.exp;r.vahta+=day.vahta;r.vahtaEx+=day.vahtaEx;r.bonus+=day.bonus;r.gross+=day.gross;r.ndfl+=day.ndfl;r.net+=day.net;}
-else if(s===‘holiday’){r.holidays++;r.workDays++;const day=calcDay(S.hours,true,withB);r.hours+=day.hrs;r.base+=day.base;r.region+=day.region;r.percent+=day.percent;r.zone+=day.zone;r.exp+=day.exp;r.vahta+=day.vahta;r.vahtaEx+=day.vahtaEx;r.holEx+=day.holEx;r.bonus+=day.bonus;r.gross+=day.gross;r.ndfl+=day.ndfl;r.net+=day.net;}
-else if(s===‘road’){r.roadDays++;const day=calcRoad();r.hours+=day.hrs;r.road+=day.gross;r.gross+=day.gross;r.ndfl+=day.ndfl;r.net+=day.net;}
-cur.setDate(cur.getDate()+1);
+  let r={workDays:0,roadDays:0,holidays:0,hours:0,base:0,region:0,percent:0,zone:0,exp:0,vahta:0,vahtaEx:0,holEx:0,bonus:0,road:0,gross:0,ndfl:0,net:0};
+  const cur=new Date(start);
+  while(cur<=end){
+    const y=cur.getFullYear(),m=cur.getMonth()+1,d=cur.getDate();
+    const s=getSt(y,m,d);
+    if(s==="vm"){r.workDays++;const day=calcDay(S.hours,false,withB);Object.keys(day).forEach(k=>{if(k in r)r[k]+=day[k]});}
+    else if(s==="holiday"){r.holidays++;r.workDays++;const day=calcDay(S.hours,true,withB);Object.keys(day).forEach(k=>{if(k in r)r[k]+=day[k]});}
+    else if(s==="road"){r.roadDays++;const day=calcRoad();r.hours+=day.hrs;r.road+=day.gross;r.gross+=day.gross;r.ndfl+=day.ndfl;r.net+=day.net;}
+    cur.setDate(cur.getDate()+1);
+  }
+  return r;
 }
-return r;
-}
+
 function findVahta(){
-const today=new Date();let start=new Date(today),end=new Date(today);
-for(let i=0;i<60;i++){const c=new Date(start);c.setDate(c.getDate()-1);const s=getSt(c.getFullYear(),c.getMonth()+1,c.getDate());if(s===‘vm’||s===‘road’||s===‘holiday’)start=c;else break;}
-for(let i=0;i<60;i++){const c=new Date(end);c.setDate(c.getDate()+1);const s=getSt(c.getFullYear(),c.getMonth()+1,c.getDate());if(s===‘vm’||s===‘road’||s===‘holiday’)end=c;else break;}
-return{start,end};
+  const today=new Date();let start=new Date(today),end=new Date(today);
+  for(let i=0;i<60;i++){const c=new Date(start);c.setDate(c.getDate()-1);const s=getSt(c.getFullYear(),c.getMonth()+1,c.getDate());if(s==="vm"||s==="road"||s==="holiday")start=c;else break;}
+  for(let i=0;i<60;i++){const c=new Date(end);c.setDate(c.getDate()+1);const s=getSt(c.getFullYear(),c.getMonth()+1,c.getDate());if(s==="vm"||s==="road"||s==="holiday")end=c;else break;}
+  return{start,end};
 }
-function getShiftProg(){const n=new Date();const h=n.getHours()+n.getMinutes()/60+n.getSeconds()/3600;if(h<8)return 0;if(h>=20)return S.hours;let w=h-8;if(h>=14)w-=1;else if(h>=13)w=5;return Math.max(0,Math.min(w,S.hours));}
-function fmt(n){return Math.round(n).toLocaleString(‘ru-RU’);}
-function fmtD(d){return d.toLocaleDateString(‘ru-RU’,{day:‘numeric’,month:‘long’});}
-function toast(m){const t=document.getElementById(‘toast’);t.textContent=m;t.classList.add(‘show’);setTimeout(()=>t.classList.remove(‘show’),2000);}
+
+function getShiftProg(){
+  const n=new Date();const h=n.getHours()+n.getMinutes()/60+n.getSeconds()/3600;
+  if(h<8)return 0;if(h>=20)return S.hours;
+  let w=h-8;if(h>=14)w-=1;else if(h>=13)w=5;
+  return Math.max(0,Math.min(w,S.hours));
+}
+function fmt(n){return Math.round(n).toLocaleString("ru-RU");}
+function fmtD(d){return d.toLocaleDateString("ru-RU",{day:"numeric",month:"long"});}
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2000);}
 
 function updateLive(){
-const now=new Date();const y=now.getFullYear(),m=now.getMonth()+1,d=now.getDate();
-const status=getSt(y,m,d);
-document.getElementById(‘liveTime’).textContent=now.toLocaleTimeString(‘ru-RU’);
-const dot=document.getElementById(‘liveDot’),txt=document.getElementById(‘liveTxt’),badge=document.getElementById(‘badge’);
+  const now=new Date();const y=now.getFullYear(),m=now.getMonth()+1,d=now.getDate();
+  const status=getSt(y,m,d);
+  document.getElementById("liveTime").textContent=now.toLocaleTimeString("ru-RU");
+  const dot=document.getElementById("liveDot"),txt=document.getElementById("liveTxt"),badge=document.getElementById("badge");
 
-```
-if(status==='vm'||status==='holiday'){
+  if(status==='vm'||status==='holiday'){
     const prog=getShiftProg();const isHol=status==='holiday';
     if(isHol){dot.className='live-dot holiday';txt.className='live-text holiday';txt.textContent='ПРАЗДНИК x2';badge.textContent='x2';badge.style.background='rgba(255,215,0,.2)';badge.style.color='#ffd700';}
     else if(prog>0&&prog<S.hours){dot.className='live-dot';txt.className='live-text on';txt.textContent='СМЕНА ИДЁТ';badge.textContent='LIVE';badge.style.background='';badge.style.color='';}
@@ -398,146 +405,211 @@ if(status==='vm'||status==='holiday'){
     document.getElementById('shiftProg').style.display='block';
     document.getElementById('shiftHrs').textContent=`${prog.toFixed(1)} / ${S.hours} ч`;
     document.getElementById('shiftFill').style.width=`${(prog/S.hours)*100}%`;
-}else if(status==='road'){
+  }else if(status==='road'){
     dot.className='live-dot road';txt.className='live-text road';txt.textContent='ДЕНЬ ДОРОГИ';badge.textContent='🛣️';
     document.getElementById('shiftProg').style.display='none';
-}else{
+  }else{
     dot.className='live-dot off';txt.className='live-text off';txt.textContent=status==='vacation'?'ОТПУСК':'ВЫХОДНОЙ';badge.textContent=status==='vacation'?'🏖️':'🏠';
     document.getElementById('shiftProg').style.display='none';
-}
+  }
 
-const vahta=findVahta();const yesterday=new Date(now);yesterday.setDate(yesterday.getDate()-1);yesterday.setHours(23,59,59);
-const pastData=calcPeriod(vahta.start,yesterday,st.withBonus);
-let todayEarned=0,perSec=0;
-if(status==='vm'||status==='holiday'){
+  const vahta=findVahta();const yesterday=new Date(now);yesterday.setDate(yesterday.getDate()-1);yesterday.setHours(23,59,59);
+  const pastData=calcPeriod(vahta.start,yesterday,st.withBonus);
+  let todayEarned=0,perSec=0;
+  if(status==='vm'||status==='holiday'){
     const prog=getShiftProg();const isHol=status==='holiday';
     const dayFull=calcDay(S.hours,isHol,st.withBonus);
     const rateH=dayFull.net/S.hours;const rateS=rateH/3600;
     todayEarned=rateH*prog;perSec=prog>0&&prog<S.hours?rateS:0;
-}else if(status==='road'){todayEarned=calcRoad().net;}
+  }else if(status==='road'){todayEarned=calcRoad().net;}
 
-const total=pastData.net+todayEarned;const rub=Math.floor(total);const kop=Math.round((total-rub)*100);
-document.getElementById('moneyRub').textContent=fmt(rub);
-document.getElementById('moneyKop').textContent='.'+kop.toString().padStart(2,'0');
-document.getElementById('perSec').textContent=perSec.toFixed(4);
-document.getElementById('moneyPs').style.display=perSec>0?'block':'none';
+  const total=pastData.net+todayEarned;const rub=Math.floor(total);const kop=Math.round((total-rub)*100);
+  document.getElementById('moneyRub').textContent=fmt(rub);
+  document.getElementById('moneyKop').textContent='.'+kop.toString().padStart(2,'0');
+  document.getElementById('perSec').textContent=perSec.toFixed(4);
+  document.getElementById('moneyPs').style.display=perSec>0?'block':'none';
 
-document.getElementById('qsToday').textContent=fmt(todayEarned)+'₽';
-document.getElementById('qsHrs').textContent=Math.round(pastData.hours+(status==='vm'||status==='holiday'?getShiftProg():0))+'ч';
-document.getElementById('qsDays').textContent=pastData.workDays+(status==='vm'||status==='holiday'?1:0);
+  document.getElementById('qsToday').textContent=fmt(todayEarned)+'₽';
+  document.getElementById('qsHrs').textContent=Math.round(pastData.hours+(status==='vm'||status==='holiday'?getShiftProg():0))+'ч';
+  document.getElementById('qsDays').textContent=pastData.workDays+(status==='vm'||status==='holiday'?1:0);
 
-const totalDays=Math.ceil((vahta.end-vahta.start)/86400000)+1;
-const passedDays=Math.ceil((now-vahta.start)/86400000);
-const pct=Math.min(100,(passedDays/totalDays)*100);
-document.getElementById('vDates').textContent=`${fmtD(vahta.start)} — ${fmtD(vahta.end)}`;
-document.getElementById('vPct').textContent=Math.round(pct)+'%';
-document.getElementById('vFill').style.width=pct+'%';
-document.getElementById('vsWork').textContent=pastData.workDays;
-document.getElementById('vsRoad').textContent=pastData.roadDays;
-document.getElementById('vsHol').textContent=pastData.holidays;
-document.getElementById('vsLeft').textContent=Math.max(0,totalDays-passedDays);
-```
-
+  const totalDays=Math.ceil((vahta.end-vahta.start)/86400000)+1;
+  const passedDays=Math.ceil((now-vahta.start)/86400000);
+  const pct=Math.min(100,(passedDays/totalDays)*100);
+  document.getElementById('vDates').textContent=`${fmtD(vahta.start)} — ${fmtD(vahta.end)}`;
+  document.getElementById('vPct').textContent=Math.round(pct)+'%';
+  document.getElementById('vFill').style.width=pct+'%';
+  document.getElementById('vsWork').textContent=pastData.workDays;
+  document.getElementById('vsRoad').textContent=pastData.roadDays;
+  document.getElementById('vsHol').textContent=pastData.holidays;
+  document.getElementById('vsLeft').textContent=Math.max(0,totalDays-passedDays);
 }
 
 function updateDayBk(){
-const day=calcDay(S.hours,false,st.withBonus);
-let h=`<div class="bk-row"><span class="bk-lbl">Оклад (${S.hours}ч × ${S.hourly}₽)</span><span class="bk-val">${fmt(day.base)}₽</span></div> <div class="bk-row"><span class="bk-lbl">Районный коэф.<span class="bk-pct">${S.region}%</span></span><span class="bk-val">${fmt(day.region)}₽</span></div> <div class="bk-row"><span class="bk-lbl">Процентная надб.<span class="bk-pct">${S.percent}%</span></span><span class="bk-val">${fmt(day.percent)}₽</span></div> <div class="bk-row"><span class="bk-lbl">ДоплРасшЗон<span class="bk-pct">${S.zone}%</span></span><span class="bk-val">${fmt(day.zone)}₽</span></div> <div class="bk-row"><span class="bk-lbl">За стаж<span class="bk-pct">${S.exp}%</span></span><span class="bk-val">${fmt(day.exp)}₽</span></div> <div class="bk-row"><span class="bk-lbl">Вахтовый метод</span><span class="bk-val">${fmt(day.vahta)}₽</span></div> <div class="bk-row"><span class="bk-lbl">Вахт. свыше</span><span class="bk-val">${fmt(day.vahtaEx)}₽</span></div>`;
-if(st.withBonus)h+=`<div class="bk-row hl"><span class="bk-lbl">🎁 Премия</span><span class="bk-val" style="color:var(--gold)">${fmt(day.bonus)}₽</span></div>`;
-h+=`<div class="bk-row"><span class="bk-lbl">НДФЛ<span class="bk-pct">${S.ndfl}%</span></span><span class="bk-val" style="color:var(--red)">-${fmt(day.ndfl)}₽</span></div> <div class="bk-row total"><span class="bk-lbl">💵 На руки</span><span class="bk-val">${fmt(day.net)}₽</span></div>`;
-document.getElementById(‘dayBk’).innerHTML=h;
+  const day=calcDay(S.hours,false,st.withBonus);
+  let h=`<div class="bk-row"><span class="bk-lbl">Оклад (${S.hours}ч × ${S.hourly}₽)</span><span class="bk-val">${fmt(day.base)}₽</span></div>
+  <div class="bk-row"><span class="bk-lbl">Районный коэф.<span class="bk-pct">${S.region}%</span></span><span class="bk-val">${fmt(day.region)}₽</span></div>
+  <div class="bk-row"><span class="bk-lbl">Процентная надб.<span class="bk-pct">${S.percent}%</span></span><span class="bk-val">${fmt(day.percent)}₽</span></div>
+  <div class="bk-row"><span class="bk-lbl">ДоплРасшЗон<span class="bk-pct">${S.zone}%</span></span><span class="bk-val">${fmt(day.zone)}₽</span></div>
+  <div class="bk-row"><span class="bk-lbl">За стаж<span class="bk-pct">${S.exp}%</span></span><span class="bk-val">${fmt(day.exp)}₽</span></div>
+  <div class="bk-row"><span class="bk-lbl">Вахтовый метод</span><span class="bk-val">${fmt(day.vahta)}₽</span></div>
+  <div class="bk-row"><span class="bk-lbl">Вахт. свыше</span><span class="bk-val">${fmt(day.vahtaEx)}₽</span></div>`;
+  if(st.withBonus)h+=`<div class="bk-row hl"><span class="bk-lbl">🎁 Премия</span><span class="bk-val" style="color:var(--gold)">${fmt(day.bonus)}₽</span></div>`;
+  h+=`<div class="bk-row"><span class="bk-lbl">НДФЛ<span class="bk-pct">${S.ndfl}%</span></span><span class="bk-val" style="color:var(--red)">-${fmt(day.ndfl)}₽</span></div>
+  <div class="bk-row total"><span class="bk-lbl">💵 На руки</span><span class="bk-val">${fmt(day.net)}₽</span></div>`;
+  document.getElementById("dayBk").innerHTML=h;
 }
 
 function renderCal(){
-const y=st.calY,m=st.calM;document.getElementById(‘calTitle’).textContent=`${MO[m]} ${y}`;
-const first=new Date(y,m,1),last=new Date(y,m+1,0),startWd=(first.getDay()+6)%7,today=new Date();
-let h=’’;for(let i=0;i<startWd;i++)h+=’<div class="cal-day empty"></div>’;
-for(let d=1;d<=last.getDate();d++){
-const s=getSt(y,m+1,d);let cls=‘cal-day’,lbl=’’;
-if(s){cls+=’ ‘+s;lbl=LB[s]||’’;}
-if(d===today.getDate()&&m===today.getMonth()&&y===today.getFullYear())cls+=’ today’;
-if(new Date(y,m,d)<new Date(today.getFullYear(),today.getMonth(),today.getDate()))cls+=’ past’;
-h+=`<div class="${cls}" data-d="${d}"><span class="cal-day-num">${d}</span>${lbl?`<span class="cal-day-lbl">${lbl}</span>`:''}</div>`;
-}
-document.getElementById(‘calGrid’).innerHTML=h;
-document.querySelectorAll(’.cal-day:not(.empty)’).forEach(el=>el.addEventListener(‘click’,()=>openEdit(parseInt(el.dataset.d))));
-updatePeriodStats();
+  const y=st.calY,m=st.calM;document.getElementById("calTitle").textContent=`${MO[m]} ${y}`;
+  const first=new Date(y,m,1),last=new Date(y,m+1,0),startWd=(first.getDay()+6)%7,today=new Date();
+  let h="";for(let i=0;i<startWd;i++)h+='<div class="cal-day empty"></div>';
+  for(let d=1;d<=last.getDate();d++){
+    const s=getSt(y,m+1,d);let cls="cal-day",lbl="";
+    if(s){cls+=" "+s;lbl=LB[s]||"";}
+    if(d===today.getDate()&&m===today.getMonth()&&y===today.getFullYear())cls+=" today";
+    if(new Date(y,m,d)<new Date(today.getFullYear(),today.getMonth(),today.getDate()))cls+=" past";
+    h+=`<div class="${cls}" data-d="${d}"><span class="cal-day-num">${d}</span>${lbl?`<span class="cal-day-lbl">${lbl}</span>`:""}</div>`;
+  }
+  document.getElementById("calGrid").innerHTML=h;
+  document.querySelectorAll(".cal-day:not(.empty)").forEach(el=>el.addEventListener("click",()=>openEdit(parseInt(el.dataset.d))));
+  updatePeriodStats();
 }
 
 function updatePeriodStats(){
-let start,end;const now=new Date();
-switch(st.period){
-case’current’:const v=findVahta();start=v.start;end=v.end;break;
-case’month’:start=new Date(now.getFullYear(),now.getMonth(),1);end=new Date(now.getFullYear(),now.getMonth()+1,0);break;
-case’year’:start=new Date(2026,0,1);end=new Date(2026,11,31);break;
-}
-const data=calcPeriod(start,end,st.withBonus);
-document.getElementById(‘psDays’).textContent=data.workDays;
-document.getElementById(‘psHrs’).textContent=Math.round(data.hours);
-document.getElementById(‘psNet’).textContent=fmt(data.net)+‘₽’;
+  let start,end;const now=new Date();
+  switch(st.period){
+    case"current":const v=findVahta();start=v.start;end=v.end;break;
+    case"month":start=new Date(now.getFullYear(),now.getMonth(),1);end=new Date(now.getFullYear(),now.getMonth()+1,0);break;
+    case"year":start=new Date(2026,0,1);end=new Date(2026,11,31);break;
+  }
+  const data=calcPeriod(start,end,st.withBonus);
+  document.getElementById("psDays").textContent=data.workDays;
+  document.getElementById("psHrs").textContent=Math.round(data.hours);
+  document.getElementById("psNet").textContent=fmt(data.net)+"₽";
 }
 
 function renderHist(){
-const html=[];const today=new Date();
-for(let i=0;i<60;i++){
-const d=new Date(today);d.setDate(d.getDate()-i);
-const s=getSt(d.getFullYear(),d.getMonth()+1,d.getDate());
-if(s===‘vm’){const day=calcDay(S.hours,false,st.withBonus);html.push(`<div class="hist-item"><div><div class="hist-date">${d.toLocaleDateString('ru-RU',{day:'numeric',month:'short',weekday:'short'})}</div><div class="hist-meta">${S.hours}ч • Вахта</div></div><span class="hist-amt">+${fmt(day.net)}₽</span></div>`);}
-else if(s===‘holiday’){const day=calcDay(S.hours,true,st.withBonus);html.push(`<div class="hist-item"><div><div class="hist-date">${d.toLocaleDateString('ru-RU',{day:'numeric',month:'short',weekday:'short'})}</div><div class="hist-meta">${S.hours}ч • Праздник</div></div><span class="hist-amt holiday">+${fmt(day.net)}₽</span></div>`);}
-else if(s===‘road’){const day=calcRoad();html.push(`<div class="hist-item"><div><div class="hist-date">${d.toLocaleDateString('ru-RU',{day:'numeric',month:'short',weekday:'short'})}</div><div class="hist-meta">${S.roadH}ч • Дорога</div></div><span class="hist-amt road">+${fmt(day.net)}₽</span></div>`);}
-}
-document.getElementById(‘histList’).innerHTML=html.length?html.join(’’):’<p style="color:var(--muted);text-align:center">Нет записей</p>’;
+  const html=[];const today=new Date();
+  for(let i=0;i<60;i++){
+    const d=new Date(today);d.setDate(d.getDate()-i);
+    const s=getSt(d.getFullYear(),d.getMonth()+1,d.getDate());
+    if(s==="vm"){const day=calcDay(S.hours,false,st.withBonus);html.push(`<div class="hist-item"><div><div class="hist-date">${d.toLocaleDateString('ru-RU',{day:'numeric',month:'short',weekday:'short'})}</div><div class="hist-meta">${S.hours}ч • Вахта</div></div><span class="hist-amt">+${fmt(day.net)}₽</span></div>`);}
+    else if(s==="holiday"){const day=calcDay(S.hours,true,st.withBonus);html.push(`<div class="hist-item"><div><div class="hist-date">${d.toLocaleDateString('ru-RU',{day:'numeric',month:'short',weekday:'short'})}</div><div class="hist-meta">${S.hours}ч • Праздник</div></div><span class="hist-amt holiday">+${fmt(day.net)}₽</span></div>`);}
+    else if(s==="road"){const day=calcRoad();html.push(`<div class="hist-item"><div><div class="hist-date">${d.toLocaleDateString('ru-RU',{day:'numeric',month:'short',weekday:'short'})}</div><div class="hist-meta">${S.roadH}ч • Дорога</div></div><span class="hist-amt road">+${fmt(day.net)}₽</span></div>`);}
+  }
+  document.getElementById("histList").innerHTML=html.length?html.join(""):'<p style="color:var(--muted);text-align:center">Нет записей</p>';
 }
 
 function openEdit(day){
-st.selDay={y:st.calY,m:st.calM+1,d:day};
-document.getElementById(‘editDate’).textContent=new Date(st.calY,st.calM,day).toLocaleDateString(‘ru-RU’,{day:‘numeric’,month:‘long’,year:‘numeric’,weekday:‘long’});
-document.getElementById(‘editOv’).classList.add(‘show’);
+  st.selDay={y:st.calY,m:st.calM+1,d:day};
+  document.getElementById("editDate").textContent=new Date(st.calY,st.calM,day).toLocaleDateString("ru-RU",{day:"numeric",month:"long",year:"numeric",weekday:"long"});
+  document.getElementById("editOv").classList.add("show");
 }
 
 function loadSet(){
-const s=localStorage.getItem(‘vset2’);if(s)S={…DEF,…JSON.parse(s)};
-document.getElementById(‘sHourly’).value=S.hourly;document.getElementById(‘sHours’).value=S.hours;
-document.getElementById(‘sVahta’).value=S.vahta;document.getElementById(‘sVahtaEx’).value=S.vahtaEx;
-document.getElementById(‘sRegion’).value=S.region;document.getElementById(‘sPercent’).value=S.percent;
-document.getElementById(‘sZone’).value=S.zone;document.getElementById(‘sExp’).value=S.exp;
-document.getElementById(‘sNdfl’).value=S.ndfl;document.getElementById(‘sRoadH’).value=S.roadH;
-document.getElementById(‘sBonus’).value=S.bonus;
+  const s=localStorage.getItem("vset2");if(s)S={...DEF,...JSON.parse(s)};
+  document.getElementById("sHourly").value=S.hourly;
+  document.getElementById("sHours").value=S.hours;
+  document.getElementById("sVahta").value=S.vahta;
+  document.getElementById("sVahtaEx").value=S.vahtaEx;
+  document.getElementById("sRegion").value=S.region;
+  document.getElementById("sPercent").value=S.percent;
+  document.getElementById("sZone").value=S.zone;
+  document.getElementById("sExp").value=S.exp;
+  document.getElementById("sNdfl").value=S.ndfl;
+  document.getElementById("sRoadH").value=S.roadH;
+  document.getElementById("sBonus").value=S.bonus;
 }
 
 function saveSet(){
-S.hourly=parseFloat(document.getElementById(‘sHourly’).value)||DEF.hourly;
-S.hours=parseFloat(document.getElementById(‘sHours’).value)||DEF.hours;
-S.vahta=parseFloat(document.getElementById(‘sVahta’).value)||DEF.vahta;
-S.vahtaEx=parseFloat(document.getElementById(‘sVahtaEx’).value)||DEF.vahtaEx;
-S.region=parseFloat(document.getElementById(‘sRegion’).value)||DEF.region;
-S.percent=parseFloat(document.getElementById(‘sPercent’).value)||DEF.percent;
-S.zone=parseFloat(document.getElementById(‘sZone’).value)||DEF.zone;
-S.exp=parseFloat(document.getElementById(‘sExp’).value)||DEF.exp;
-S.ndfl=parseFloat(document.getElementById(‘sNdfl’).value)||DEF.ndfl;
-S.roadH=parseFloat(document.getElementById(‘sRoadH’).value)||DEF.roadH;
-S.bonus=parseFloat(document.getElementById(‘sBonus’).value)||DEF.bonus;
-localStorage.setItem(‘vset2’,JSON.stringify(S));toast(‘✓ Сохранено’);updateLive();updateDayBk();
+  S.hourly=parseFloat(document.getElementById("sHourly").value)||DEF.hourly;
+  S.hours=parseFloat(document.getElementById("sHours").value)||DEF.hours;
+  S.vahta=parseFloat(document.getElementById("sVahta").value)||DEF.vahta;
+  S.vahtaEx=parseFloat(document.getElementById("sVahtaEx").value)||DEF.vahtaEx;
+  S.region=parseFloat(document.getElementById("sRegion").value)||DEF.region;
+  S.percent=parseFloat(document.getElementById("sPercent").value)||DEF.percent;
+  S.zone=parseFloat(document.getElementById("sZone").value)||DEF.zone;
+  S.exp=parseFloat(document.getElementById("sExp").value)||DEF.exp;
+  S.ndfl=parseFloat(document.getElementById("sNdfl").value)||DEF.ndfl;
+  S.roadH=parseFloat(document.getElementById("sRoadH").value)||DEF.roadH;
+  S.bonus=parseFloat(document.getElementById("sBonus").value)||DEF.bonus;
+  localStorage.setItem("vset2",JSON.stringify(S));
+  updateDayBk();updateLive();updatePeriodStats();renderHist();
+  toast("Сохранено");
 }
 
-document.querySelectorAll(’.nav-item’).forEach(i=>i.addEventListener(‘click’,function(){
-const t=this.dataset.t;document.querySelectorAll(’.nav-item’).forEach(n=>n.classList.remove(‘active’));
-document.querySelectorAll(’.tab-content’).forEach(c=>c.classList.remove(‘active’));
-this.classList.add(‘active’);document.getElementById(‘tab-’+t).classList.add(‘active’);
-if(t===‘cal’)renderCal();if(t===‘hist’)renderHist();
-}));
-document.getElementById(‘calPrev’).addEventListener(‘click’,()=>{st.calM–;if(st.calM<0){st.calM=11;st.calY–;}if(st.calY<2025){st.calY=2025;st.calM=0;}renderCal();});
-document.getElementById(‘calNext’).addEventListener(‘click’,()=>{st.calM++;if(st.calM>11){st.calM=0;st.calY++;}if(st.calY>2027){st.calY=2027;st.calM=11;}renderCal();});
-document.querySelectorAll(’.period-btn’).forEach(b=>b.addEventListener(‘click’,function(){st.period=this.dataset.p;document.querySelectorAll(’.period-btn’).forEach(x=>x.classList.remove(‘active’));this.classList.add(‘active’);updatePeriodStats();}));
-document.getElementById(‘tgBonus’).addEventListener(‘click’,function(){st.withBonus=true;this.classList.add(‘on’);document.getElementById(‘tgNoBonus’).classList.remove(‘on’);updateDayBk();updateLive();});
-document.getElementById(‘tgNoBonus’).addEventListener(‘click’,function(){st.withBonus=false;this.classList.add(‘on’);document.getElementById(‘tgBonus’).classList.remove(‘on’);updateDayBk();updateLive();});
-document.getElementById(‘editClose’).addEventListener(‘click’,()=>document.getElementById(‘editOv’).classList.remove(‘show’));
-document.getElementById(‘editOv’).addEventListener(‘click’,e=>{if(e.target.id===‘editOv’)document.getElementById(‘editOv’).classList.remove(‘show’);});
-document.querySelectorAll(’.edit-btn’).forEach(b=>b.addEventListener(‘click’,function(){if(!st.selDay)return;setSt(st.selDay.y,st.selDay.m,st.selDay.d,this.dataset.s);document.getElementById(‘editOv’).classList.remove(‘show’);renderCal();updateLive();toast(‘✓ Обновлено’);}));
-document.getElementById(‘saveBtn’).addEventListener(‘click’,saveSet);
+// инициализация
+document.addEventListener("DOMContentLoaded",()=>{
+  loadSch();
+  loadSet();
+  renderCal();
+  updateDayBk();
+  renderHist();
+  updateLive();
+  setInterval(updateLive,500);
 
-function init(){loadSch();loadSet();const now=new Date();st.calY=now.getFullYear();st.calM=now.getMonth();updateLive();updateDayBk();renderCal();setInterval(updateLive,1000);}
-document.addEventListener(‘DOMContentLoaded’,init);
+  // табы
+  document.querySelectorAll(".nav-item").forEach(i=>{
+    i.addEventListener("click",()=>{
+      document.querySelectorAll(".nav-item").forEach(j=>j.classList.remove("active"));
+      i.classList.add("active");
+      const t=i.dataset.t;
+      document.querySelectorAll(".tab-content").forEach(c=>c.classList.remove("active"));
+      document.getElementById("tab-"+t).classList.add("active");
+    });
+  });
+
+  // переключатель премии
+  const tgBonus=document.getElementById("tgBonus");
+  const tgNoBonus=document.getElementById("tgNoBonus");
+  tgBonus.addEventListener("click",()=>{
+    st.withBonus=true;
+    tgBonus.classList.add("on");
+    tgNoBonus.classList.remove("on");
+    updateDayBk();updateLive();updatePeriodStats();renderHist();
+  });
+  tgNoBonus.addEventListener("click",()=>{
+    st.withBonus=false;
+    tgNoBonus.classList.add("on");
+    tgBonus.classList.remove("on");
+    updateDayBk();updateLive();updatePeriodStats();renderHist();
+  });
+
+  // календарь период
+  document.querySelectorAll(".period-btn").forEach(b=>{
+    b.addEventListener("click",()=>{
+      document.querySelectorAll(".period-btn").forEach(x=>x.classList.remove("active"));
+      b.classList.add("active");
+      st.period=b.dataset.p;
+      updatePeriodStats();
+    });
+  });
+
+  // стрелки календаря
+  document.getElementById("calPrev").addEventListener("click",()=>{
+    st.calM--;if(st.calM<0){st.calM=11;st.calY--;}renderCal();
+  });
+  document.getElementById("calNext").addEventListener("click",()=>{
+    st.calM++;if(st.calM>11){st.calM=0;st.calY++;}renderCal();
+  });
+
+  // оверлей редактирования
+  document.getElementById("editClose").addEventListener("click",()=>document.getElementById("editOv").classList.remove("show"));
+  document.querySelectorAll(".edit-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      if(!st.selDay)return;
+      const {y,m,d}=st.selDay;
+      const s=btn.dataset.s;
+      setSt(y,m,d,s);
+      document.getElementById("editOv").classList.remove("show");
+      renderCal();updateLive();renderHist();updatePeriodStats();
+    });
+  });
+
+  // сохранение настроек
+  document.getElementById("saveBtn").addEventListener("click",saveSet);
+});
 </script>
 
 </body>
