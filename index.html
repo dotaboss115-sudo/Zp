@@ -655,7 +655,8 @@
         </div>
         <div class="set-section">
             <div class="set-title">🎁 Премия</div>
-            <div class="set-row"><span class="set-lbl">Месячная премия</span><input type="number" class="set-input" id="sBonus" value="17857"></div>
+            <div class="set-row"><span class="set-lbl">Процент премии</span><input type="number" class="set-input" id="sBonusPercent" value="30" min="0" max="100"><span style="margin-left:8px;color:var(--muted);font-size:.8rem">%</span></div>
+            <div style="font-size:.7rem;color:var(--muted);margin-top:8px;padding:0 12px">Премия = (База + все надбавки) × %</div>
         </div>
         <div class="set-section">
             <div class="set-title">🔐 Безопасность</div>
@@ -694,7 +695,7 @@
 <script>
     const MO=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
     const LB={vm:'ВМ',vo:'ВО',road:'Д',vacation:'ОТ',hospital:'Б',holiday:'⭐'};
-    const DEF={hourly:187.94,hours:11,vahta:700,vahtaEx:100,region:70,percent:50,zone:10,exp:30,ndfl:13,roadH:8,bonus:17857};
+    const DEF={hourly:187.94,hours:11,vahta:700,vahtaEx:100,region:70,percent:50,zone:10,exp:30,ndfl:13,roadH:8,bonusPercent:30};
     const PASSWORD='65420';
     const APP_VERSION='2.3'; // Stable version - no auto clear
     
@@ -856,7 +857,9 @@
         const vahta=S.vahta;
         const vahtaEx=S.vahtaEx;
         const holEx=isHol?base*1.722:0;
-        const bonus=withB?(S.bonus/23):0;
+        // FIXED: Bonus is 30% of (base + all allowances)
+        const baseWithAllowances=base+region+percent+zone+exp;
+        const bonus=withB?(baseWithAllowances*(S.bonusPercent/100)):0;
         const gross=base+region+percent+zone+exp+vahta+vahtaEx+holEx+bonus;
         const ndfl=gross*(S.ndfl/100);
         return{base,region,percent,zone,exp,vahta,vahtaEx,holEx,bonus,gross,ndfl,net:gross-ndfl,hrs};
@@ -960,7 +963,7 @@
         <div class="bk-row"><span class="bk-lbl">За стаж<span class="bk-pct">${S.exp}%</span></span><span class="bk-val">${fmt(day.exp)}₽</span></div>
         <div class="bk-row"><span class="bk-lbl">Вахтовый метод</span><span class="bk-val">${fmt(day.vahta)}₽</span></div>
         <div class="bk-row"><span class="bk-lbl">Вахт. свыше</span><span class="bk-val">${fmt(day.vahtaEx)}₽</span></div>`;
-        if(st.withBonus)h+=`<div class="bk-row hl"><span class="bk-lbl">🎁 Премия</span><span class="bk-val" style="color:var(--gold)">${fmt(day.bonus)}₽</span></div>`;
+        if(st.withBonus)h+=`<div class="bk-row hl"><span class="bk-lbl">🎁 Премия <span style="font-size:.6rem;opacity:.6">(${S.bonusPercent}%)</span></span><span class="bk-val" style="color:var(--gold)">${fmt(day.bonus)}₽</span></div>`;
         h+=`<div class="bk-row"><span class="bk-lbl">НДФЛ<span class="bk-pct">${S.ndfl}%</span></span><span class="bk-val" style="color:var(--red)">-${fmt(day.ndfl)}₽</span></div>
         <div class="bk-row total"><span class="bk-lbl">💵 На руки</span><span class="bk-val">${fmt(day.net)}₽</span></div>`;
         document.getElementById('dayBk').innerHTML=h;
@@ -1014,13 +1017,22 @@
     }
 
     function loadSet(){
-        const s=localStorage.getItem('vset2');if(s)S={...DEF,...JSON.parse(s)};
+        const s=localStorage.getItem('vset2');
+        if(s){
+            const loaded=JSON.parse(s);
+            // Migrate old bonus to bonusPercent if needed
+            if(loaded.bonus && !loaded.bonusPercent){
+                loaded.bonusPercent=30; // Default to 30%
+                delete loaded.bonus;
+            }
+            S={...DEF,...loaded};
+        }
         document.getElementById('sHourly').value=S.hourly;document.getElementById('sHours').value=S.hours;
         document.getElementById('sVahta').value=S.vahta;document.getElementById('sVahtaEx').value=S.vahtaEx;
         document.getElementById('sRegion').value=S.region;document.getElementById('sPercent').value=S.percent;
         document.getElementById('sZone').value=S.zone;document.getElementById('sExp').value=S.exp;
         document.getElementById('sNdfl').value=S.ndfl;document.getElementById('sRoadH').value=S.roadH;
-        document.getElementById('sBonus').value=S.bonus;
+        document.getElementById('sBonusPercent').value=S.bonusPercent;
     }
 
     function saveSet(){
@@ -1034,7 +1046,7 @@
         S.exp=parseFloat(document.getElementById('sExp').value)||DEF.exp;
         S.ndfl=parseFloat(document.getElementById('sNdfl').value)||DEF.ndfl;
         S.roadH=parseFloat(document.getElementById('sRoadH').value)||DEF.roadH;
-        S.bonus=parseFloat(document.getElementById('sBonus').value)||DEF.bonus;
+        S.bonusPercent=parseFloat(document.getElementById('sBonusPercent').value)||DEF.bonusPercent;
         localStorage.setItem('vset2',JSON.stringify(S));
         localStorage.setItem('vtheme',st.theme);
         toast('✅ Сохранено');
