@@ -40,6 +40,7 @@
     [data-theme="rosneft"] .vs-val{color:#ffd700}
     [data-theme="rosneft"] .cal-section{background:#2a2219;border:1px solid rgba(212,175,55,.15)}
     [data-theme="rosneft"] .cal-day.vm{background:rgba(255,215,0,.2);border-color:rgba(255,215,0,.4);color:#ffd700}
+    [data-theme="rosneft"] .cal-day.holiday{background:rgba(255,140,0,.4);border-color:rgba(255,140,0,.7);color:#ff6600;font-weight:700;box-shadow:0 0 8px rgba(255,140,0,.4)}
     [data-theme="rosneft"] .cal-day.today{box-shadow:0 0 0 2px #ffd700,0 0 15px rgba(255,215,0,.5)}
     [data-theme="rosneft"] .bottom-nav{background:linear-gradient(to top,rgba(26,20,18,.98),rgba(34,26,22,.95));border-top:1px solid rgba(212,175,55,.2)}
     [data-theme="rosneft"] .nav-item.active{background:rgba(255,215,0,.15);color:#ffd700}
@@ -63,6 +64,7 @@
     .theme-btn:active{transform:scale(.85) rotate(180deg)}
     .container{padding:16px;animation:fadeIn .5s ease}
     @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeOut{from{opacity:1}to{opacity:0}}
 
     .live-card{background:linear-gradient(180deg,var(--card),var(--bg2));border-radius:24px;padding:24px;margin-bottom:16px;border:1px solid var(--border);position:relative;overflow:hidden;transition:all .5s ease;animation:slideUp .6s ease}
     @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
@@ -157,7 +159,7 @@
     .cal-day.vo{background:rgba(255,69,58,.1);border-color:rgba(255,69,58,.2);color:var(--red)}
     .cal-day.road{background:rgba(10,132,255,.15);border-color:rgba(10,132,255,.3);color:var(--blue)}
     .cal-day.vacation{background:rgba(191,90,242,.15);border-color:rgba(191,90,242,.3);color:var(--purple)}
-    .cal-day.holiday{background:rgba(255,215,0,.2);border-color:rgba(255,215,0,.4);color:var(--gold)}
+    .cal-day.holiday{background:rgba(255,215,0,.35);border-color:rgba(255,215,0,.6);color:#ff8800;font-weight:700;box-shadow:0 0 8px rgba(255,215,0,.3)}
     .cal-day.hospital{background:rgba(255,149,0,.15);border-color:rgba(255,149,0,.3);color:var(--orange)}
     .cal-day.today{box-shadow:0 0 0 2px var(--gold),0 0 15px rgba(255,215,0,.4);animation:todayPulse 2s ease-in-out infinite}
     @keyframes todayPulse{0%,100%{box-shadow:0 0 0 2px var(--gold),0 0 15px rgba(255,215,0,.4)}50%{box-shadow:0 0 0 2px var(--gold),0 0 20px rgba(255,215,0,.6)}}
@@ -245,12 +247,97 @@
     
     .offline-badge{position:fixed;top:calc(60px + env(safe-area-inset-top) + 10px);left:16px;background:#ff453a;color:#fff;border-radius:8px;padding:6px 12px;font-size:.65rem;font-weight:600;opacity:0;transition:all .3s ease;pointer-events:none;z-index:60}
     .offline-badge.show{opacity:1}
+    
+    .login-screen{position:fixed;top:0;left:0;right:0;bottom:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:var(--bg)}
+    .login-container{position:relative;z-index:2;width:90%;max-width:400px;animation:fadeIn .8s ease}
+    .login-logo{text-align:center;margin-bottom:40px}
+    .login-logo-icon{width:80px;height:80px;margin:0 auto 20px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:3rem;box-shadow:0 10px 40px rgba(0,255,136,.3);animation:pulse 2s ease-in-out infinite}
+    .login-title{font-size:2rem;font-weight:800;margin-bottom:8px;background:linear-gradient(135deg,var(--accent),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .login-subtitle{font-size:.8rem;color:var(--muted);font-weight:500}
+    .login-form{background:var(--card);border-radius:24px;padding:32px;border:1px solid var(--border);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+    .login-user-card{display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg2);border-radius:16px;margin-bottom:24px;border:1px solid var(--border)}
+    .login-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:2rem;border:3px solid var(--border)}
+    .login-user-info{flex:1}
+    .login-user-name{font-size:1rem;font-weight:700;margin-bottom:4px}
+    .login-user-position{font-size:.7rem;color:var(--muted)}
+    .input-group{position:relative;margin-bottom:20px}
+    .input-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:1.2rem;opacity:.5}
+    .login-input{width:100%;padding:16px 16px 16px 48px;background:var(--bg2);border:2px solid var(--border);border-radius:14px;color:var(--text);font-size:1.1rem;font-family:'JetBrains Mono',monospace;font-weight:600;letter-spacing:4px;text-align:center;outline:none;transition:all .3s ease}
+    .login-input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,255,136,.1);background:var(--card)}
+    .login-input::placeholder{letter-spacing:normal;font-family:'Unbounded',sans-serif;font-weight:400;font-size:.8rem}
+    .login-btn{width:100%;padding:18px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:14px;color:var(--bg);font-size:1rem;font-weight:700;cursor:pointer;font-family:'Unbounded',sans-serif;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .3s ease;box-shadow:0 4px 20px rgba(0,255,136,.3)}
+    .login-btn:hover{transform:translateY(-2px);box-shadow:0 6px 30px rgba(0,255,136,.4)}
+    .login-btn:active{transform:translateY(0);box-shadow:0 2px 10px rgba(0,255,136,.3)}
+    .login-btn-icon{font-size:1.4rem;transition:transform .3s ease}
+    .login-btn:hover .login-btn-icon{transform:translateX(4px)}
+    .login-error{color:var(--red);font-size:.8rem;text-align:center;margin-top:12px;opacity:0;transition:opacity .3s ease;font-weight:600}
+    .login-error.show{opacity:1;animation:shake .5s ease}
+    @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+    .login-footer{display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)}
+    .login-hint{font-size:.7rem;color:var(--accent);display:flex;align-items:center;gap:6px}
+    .login-version{font-size:.65rem;color:var(--muted)}
+    .login-bg{position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden;opacity:.1}
+    .login-bg-pattern{width:200%;height:200%;background:repeating-linear-gradient(45deg,var(--accent) 0px,var(--accent) 10px,transparent 10px,transparent 20px);animation:bgScroll 20s linear infinite}
+    @keyframes bgScroll{0%{transform:translate(0,0)}100%{transform:translate(-50%,-50%)}}
+    
+    [data-theme="rosneft"] .login-logo-icon{background:linear-gradient(135deg,#ffd700,#f4d03f);box-shadow:0 10px 40px rgba(255,215,0,.3)}
+    [data-theme="rosneft"] .login-title{background:linear-gradient(135deg,#ffd700,#f4d03f);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    [data-theme="rosneft"] .login-avatar{background:linear-gradient(135deg,#ffd700,#f4d03f)}
+    [data-theme="rosneft"] .login-btn{background:linear-gradient(135deg,#ffd700,#f4d03f);color:#1a1412;box-shadow:0 4px 20px rgba(255,215,0,.3)}
+    [data-theme="rosneft"] .login-btn:hover{box-shadow:0 6px 30px rgba(255,215,0,.4)}
+    [data-theme="rosneft"] .login-hint{color:#ffd700}
+    
+    .profile-header{display:flex;align-items:center;gap:20px;padding:24px;background:var(--card);border-radius:20px;margin-bottom:16px;border:1px solid var(--border);animation:slideUp .6s ease}
+    .photo-wrapper{position:relative}
+    .photo{width:100px;height:100px;border-radius:50%;background:var(--bg2);border:3px solid var(--border);overflow:hidden;transition:all .3s ease;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    .photo:active{transform:scale(.95)}
+    .photo-placeholder{font-size:3rem;opacity:.5}
+    .photo-edit{position:absolute;bottom:0;right:0;width:32px;height:32px;border-radius:50%;background:var(--accent);border:2px solid var(--card);font-size:.9rem;cursor:pointer;transition:all .2s ease}
+    .photo-edit:active{transform:scale(.9)}
+    .profile-info{flex:1}
+    .profile-name{font-size:1.4rem;font-weight:700;margin-bottom:4px}
+    .profile-position{font-size:.8rem;color:var(--text2);margin-bottom:2px}
+    .profile-company{font-size:.7rem;color:var(--muted)}
+    
+    .work-info{display:flex;flex-direction:column;gap:10px}
+    .work-row{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--bg2);border-radius:10px}
+    .work-label{font-size:.75rem;color:var(--muted)}
+    .work-value{font-size:.8rem;font-weight:600;color:var(--text);text-align:right}
+    .edit-mini-btn{width:32px;height:32px;border-radius:8px;background:var(--bg2);border:1px solid var(--border);font-size:.9rem;cursor:pointer;transition:all .2s ease;display:flex;align-items:center;justify-content:center}
+    .edit-mini-btn:active{transform:scale(.9);background:var(--accent);border-color:var(--accent)}
+    
+    .motto-text{padding:16px;background:var(--bg2);border-radius:12px;font-size:.9rem;color:var(--text2);font-style:italic;text-align:center;line-height:1.5;border-left:3px solid var(--accent)}
+    
+    .color-picker-wrap{padding:12px}
+    .color-options{display:grid;grid-template-columns:repeat(8,1fr);gap:10px;margin-bottom:12px}
+    .color-opt{aspect-ratio:1;border-radius:10px;cursor:pointer;transition:all .2s ease;border:3px solid transparent;position:relative}
+    .color-opt:active{transform:scale(.9)}
+    .color-opt.active{border-color:#fff;box-shadow:0 0 10px currentColor}
+    .color-opt.active::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:1.2rem;font-weight:700;text-shadow:0 0 3px #000}
+    .custom-color-input{width:100%;height:50px;border-radius:12px;border:2px solid var(--border);background:var(--bg2);cursor:pointer;transition:all .2s ease}
+    .custom-color-input:active{transform:scale(.98)}
+    
+    .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;animation:fadeIn .7s ease .1s backwards}
+    .stat-card{background:var(--card);border-radius:16px;padding:16px;text-align:center;border:1px solid var(--border);transition:all .3s ease}
+    .stat-card:active{transform:scale(.98)}
+    .stat-icon{font-size:2rem;margin-bottom:8px}
+    .stat-value{font-family:'JetBrains Mono',monospace;font-size:1.3rem;font-weight:700;color:var(--accent);margin-bottom:4px}
+    .stat-label{font-size:.65rem;color:var(--muted);text-transform:uppercase}
+    
+    .month-row{display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg2);border-radius:10px;transition:all .3s ease;cursor:pointer}
+    .month-row:active{transform:scale(.98)}
+    .month-name{font-size:.75rem;font-weight:600}
+    .month-amount{font-family:'JetBrains Mono',monospace;font-size:.9rem;font-weight:700;color:var(--accent)}
+    
+    .quick-actions{display:grid;grid-template-columns:1fr;gap:10px}
+    .action-btn{padding:14px;border-radius:12px;background:var(--bg2);border:1px solid var(--border);color:var(--text);font-size:.8rem;font-weight:600;cursor:pointer;font-family:'Unbounded',sans-serif;transition:all .3s ease;display:flex;align-items:center;justify-content:center;gap:8px}
+    .action-btn:active{transform:scale(.98);background:var(--accent);color:var(--bg);border-color:var(--accent)}
 </style>
 ```
 
 </head>
 <body data-theme="dark">
-    <header class="header">
+    <header class="header" id="mainHeader" style="display:none">
         <div class="logo">
             <div class="logo-icon">⛏️</div>
             <span class="logo-text">Вахта Live</span>
@@ -265,7 +352,51 @@
 <div class="save-indicator" id="saveInd">💾 Сохранено</div>
 <div class="offline-badge" id="offlineBadge">📵 Офлайн режим</div>
 
-<div class="container">
+<!-- Login Screen -->
+<div class="login-screen" id="loginScreen">
+    <div class="login-container">
+        <div class="login-logo">
+            <div class="login-logo-icon">⛏️</div>
+            <h1 class="login-title">Вахта Live</h1>
+            <p class="login-subtitle">Профессиональный учёт вахтовой работы</p>
+        </div>
+        <div class="login-form">
+            <div class="login-user-card">
+                <div class="login-avatar">👤</div>
+                <div class="login-user-info">
+                    <div class="login-user-name">Иванов Дмитрий</div>
+                    <div class="login-user-position">Техник • СИБИНТЕК</div>
+                </div>
+            </div>
+            <div class="input-group">
+                <div class="input-icon">🔒</div>
+                <input 
+                    type="password" 
+                    id="loginPassword" 
+                    class="login-input" 
+                    placeholder="Введите пароль"
+                    maxlength="5"
+                    inputmode="numeric"
+                    autocomplete="off"
+                >
+            </div>
+            <button class="login-btn" id="loginBtn">
+                <span class="login-btn-text">Войти</span>
+                <span class="login-btn-icon">→</span>
+            </button>
+            <div class="login-error" id="loginError">Неверный пароль</div>
+            <div class="login-footer">
+                <div class="login-hint">🔐 Защищённый доступ</div>
+                <div class="login-version">v2.0 • 2025</div>
+            </div>
+        </div>
+    </div>
+    <div class="login-bg">
+        <div class="login-bg-pattern"></div>
+    </div>
+</div>
+
+<div class="container" id="mainApp" style="display:none">
     <div id="tab-dash" class="tab-content active">
         <div class="live-card">
             <div class="live-status">
@@ -320,6 +451,126 @@
                 <div class="vs"><div class="vs-val" style="color:var(--blue)" id="vsRoad">0</div><div class="vs-lbl">Дорога</div></div>
                 <div class="vs"><div class="vs-val" style="color:var(--gold)" id="vsHol">0</div><div class="vs-lbl">Празд.</div></div>
                 <div class="vs"><div class="vs-val" style="color:var(--orange)" id="vsLeft">0</div><div class="vs-lbl">Остал.</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile -->
+    <div id="tab-profile" class="tab-content">
+        <div class="profile-header">
+            <div class="photo-wrapper">
+                <div class="photo" id="photo">
+                    <img id="photoImg" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%">
+                    <div id="photoPlaceholder" class="photo-placeholder">📸</div>
+                </div>
+                <input type="file" id="photoInput" accept="image/*" style="display:none">
+                <button class="photo-edit" id="photoEdit">📷</button>
+            </div>
+            <div class="profile-info">
+                <h2 class="profile-name" id="profileName">Иванов Дмитрий Вячеславович</h2>
+                <div class="profile-position" id="profilePosition">Техник</div>
+                <div class="profile-company" id="profileCompany">ООО ИК СИБИНТЕК</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-head">
+                <span class="card-title">🏢 Место работы</span>
+                <button class="edit-mini-btn" id="editWork">✏️</button>
+            </div>
+            <div class="work-info">
+                <div class="work-row">
+                    <span class="work-label">Компания:</span>
+                    <span class="work-value" id="workCompany">ООО ИК СИБИНТЕК</span>
+                </div>
+                <div class="work-row">
+                    <span class="work-label">Филиал:</span>
+                    <span class="work-value" id="workField">Макрорегион Восточная Сибирь</span>
+                </div>
+                <div class="work-row">
+                    <span class="work-label">Участок:</span>
+                    <span class="work-value" id="workSite">Участок метрологии</span>
+                </div>
+                <div class="work-row">
+                    <span class="work-label">Должность:</span>
+                    <span class="work-value" id="workPosition">Техник</span>
+                </div>
+                <div class="work-row">
+                    <span class="work-label">Опыт работы:</span>
+                    <span class="work-value" id="workExp">3 года</span>
+                </div>
+                <div class="work-row">
+                    <span class="work-label">Табельный номер:</span>
+                    <span class="work-value" id="workTabNum">г000-42454</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-head">
+                <span class="card-title">💭 Девиз</span>
+                <button class="edit-mini-btn" id="editMotto">✏️</button>
+            </div>
+            <div class="motto-text" id="mottoText">Точность — залог успеха!</div>
+        </div>
+
+        <div class="card">
+            <div class="card-head">
+                <span class="card-title">🎨 Персональный цвет</span>
+            </div>
+            <div class="color-picker-wrap">
+                <div class="color-options">
+                    <div class="color-opt" data-color="#00ff88" style="background:#00ff88"></div>
+                    <div class="color-opt" data-color="#ffd700" style="background:#ffd700"></div>
+                    <div class="color-opt" data-color="#0a84ff" style="background:#0a84ff"></div>
+                    <div class="color-opt" data-color="#bf5af2" style="background:#bf5af2"></div>
+                    <div class="color-opt" data-color="#ff453a" style="background:#ff453a"></div>
+                    <div class="color-opt" data-color="#ff9500" style="background:#ff9500"></div>
+                    <div class="color-opt" data-color="#00d4ff" style="background:#00d4ff"></div>
+                    <div class="color-opt" data-color="#ff2d55" style="background:#ff2d55"></div>
+                </div>
+                <input type="color" id="customColor" class="custom-color-input" value="#00ff88">
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-value" id="totalEarned">0₽</div>
+                <div class="stat-label">Всего заработано</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📅</div>
+                <div class="stat-value" id="totalDays">0</div>
+                <div class="stat-label">Дней отработано</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⏰</div>
+                <div class="stat-value" id="totalHours">0ч</div>
+                <div class="stat-label">Часов на вахте</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-value" id="avgDay">0₽</div>
+                <div class="stat-label">Средний день</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-head">
+                <span class="card-title">📊 Статистика по месяцам</span>
+            </div>
+            <div class="months-stats" id="monthsStats"></div>
+        </div>
+
+        <div class="card">
+            <div class="card-head">
+                <span class="card-title">🎮 Быстрые действия</span>
+            </div>
+            <div class="quick-actions">
+                <button class="action-btn" id="exportData">📥 Экспорт данных</button>
+                <button class="action-btn" id="resetStats">🔄 Сбросить статистику</button>
+                <button class="action-btn" id="shareProfile">📤 Поделиться</button>
             </div>
         </div>
     </div>
@@ -390,6 +641,10 @@
             <div class="set-title">🎁 Премия</div>
             <div class="set-row"><span class="set-lbl">Месячная премия</span><input type="number" class="set-input" id="sBonus" value="17857"></div>
         </div>
+        <div class="set-section">
+            <div class="set-title">🔐 Безопасность</div>
+            <button class="save-btn" id="logoutBtn" style="background:linear-gradient(135deg,var(--red),#ff6b6b);margin-top:0">🚪 Выйти из аккаунта</button>
+        </div>
         <button class="save-btn" id="saveBtn">💾 Сохранить</button>
     </div>
 </div>
@@ -409,8 +664,9 @@
     </div>
 </div>
 
-<nav class="bottom-nav">
+<nav class="bottom-nav" id="mainNav" style="display:none">
     <div class="nav-item active" data-t="dash"><span class="nav-icon">💰</span>Live</div>
+    <div class="nav-item" data-t="profile"><span class="nav-icon">👤</span>Профиль</div>
     <div class="nav-item" data-t="cal"><span class="nav-icon">📅</span>Календарь</div>
     <div class="nav-item" data-t="hist"><span class="nav-icon">📜</span>История</div>
     <div class="nav-item" data-t="set"><span class="nav-icon">⚙️</span>Настройки</div>
@@ -420,11 +676,68 @@
 
 <script>
     const MO=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-    const LB={vm:'ВМ',vo:'ВО',road:'Д',vacation:'ОТ',hospital:'Б',holiday:'П'};
+    const LB={vm:'ВМ',vo:'ВО',road:'Д',vacation:'ОТ',hospital:'Б',holiday:'⭐'};
     const DEF={hourly:187.94,hours:11,vahta:700,vahtaEx:100,region:70,percent:50,zone:10,exp:30,ndfl:13,roadH:8,bonus:17857};
-    let S={...DEF},st={calY:2025,calM:11,selDay:null,period:'current',withBonus:true,theme:'dark'},sch={};
+    const PASSWORD='65420';
+    const APP_VERSION='2.1'; // New version with login
+    
+    // Clear old cache if version changed
+    const savedVersion=localStorage.getItem('vversion');
+    if(savedVersion!==APP_VERSION){
+        console.log('New version detected, clearing all cache...');
+        localStorage.clear();
+        localStorage.setItem('vversion',APP_VERSION);
+    }
+    
+    let S={...DEF},st={calY:2025,calM:11,selDay:null,period:'current',withBonus:true,theme:'dark',profile:{name:'Иванов Дмитрий Вячеславович',photo:'',company:'ООО ИК СИБИНТЕК',field:'Филиал «Макрорегион Восточная Сибирь»',site:'Участок метрологии',position:'Техник',experience:'3 года',motto:'Точность — залог успеха!',color:'#00ff88',tabNum:'г000-42454'}},sch={};
     let autoSaveTimer=null;
     let isOnline=navigator.onLine;
+    let isLoggedIn=false;
+
+    // Login system
+    function checkLogin(){
+        const saved=localStorage.getItem('vlogin');
+        if(saved==='true'){
+            showApp();
+            return true;
+        }
+        return false;
+    }
+
+    function showApp(){
+        isLoggedIn=true;
+        document.getElementById('loginScreen').style.display='none';
+        document.getElementById('mainHeader').style.display='flex';
+        document.getElementById('mainApp').style.display='block';
+        document.getElementById('mainNav').style.display='flex';
+        init();
+    }
+
+    function handleLogin(){
+        const input=document.getElementById('loginPassword');
+        const password=input.value;
+        const errorEl=document.getElementById('loginError');
+        
+        if(password===PASSWORD){
+            localStorage.setItem('vlogin','true');
+            errorEl.classList.remove('show');
+            document.getElementById('loginScreen').style.animation='fadeOut .5s ease forwards';
+            setTimeout(showApp,500);
+        }else{
+            errorEl.classList.add('show');
+            input.value='';
+            input.style.animation='shake .5s ease';
+            setTimeout(()=>{
+                errorEl.classList.remove('show');
+                input.style.animation='';
+            },2000);
+        }
+    }
+
+    document.getElementById('loginBtn').addEventListener('click',handleLogin);
+    document.getElementById('loginPassword').addEventListener('keypress',e=>{
+        if(e.key==='Enter')handleLogin();
+    });
 
     // Online/Offline detection (Service Worker removed for security)
     window.addEventListener('online',()=>{
@@ -482,7 +795,7 @@
         const exp=base*(S.exp/100);
         const vahta=S.vahta;
         const vahtaEx=S.vahtaEx;
-        const holEx=isHol?base:0;
+        const holEx=isHol?base*1.722:0;
         const bonus=withB?(S.bonus/23):0;
         const gross=base+region+percent+zone+exp+vahta+vahtaEx+holEx+bonus;
         const ndfl=gross*(S.ndfl/100);
@@ -684,8 +997,22 @@
         const t=this.dataset.t;document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
         this.classList.add('active');document.getElementById('tab-'+t).classList.add('active');
-        if(t==='cal')renderCal();if(t==='hist')renderHist();
+        if(t==='cal')renderCal();if(t==='hist')renderHist();if(t==='profile')updateProfile();
     }));
+    
+    document.getElementById('saveBtn').addEventListener('click',saveSet);
+    
+    setTimeout(()=>{
+        const logoutBtn=document.getElementById('logoutBtn');
+        if(logoutBtn){
+            logoutBtn.addEventListener('click',()=>{
+                if(confirm('Выйти из аккаунта?')){
+                    localStorage.removeItem('vlogin');
+                    location.reload();
+                }
+            });
+        }
+    },500);
     
     document.getElementById('themeBtn').addEventListener('click',()=>{
         const newTheme=st.theme==='dark'?'rosneft':'dark';
@@ -706,17 +1033,236 @@
     document.getElementById('editClose').addEventListener('click',()=>document.getElementById('editOv').classList.remove('show'));
     document.getElementById('editOv').addEventListener('click',e=>{if(e.target.id==='editOv')document.getElementById('editOv').classList.remove('show');});
     document.querySelectorAll('.edit-btn').forEach(b=>b.addEventListener('click',function(){if(!st.selDay)return;setSt(st.selDay.y,st.selDay.m,st.selDay.d,this.dataset.s);document.getElementById('editOv').classList.remove('show');renderCal();updateLive();toast('✅ Обновлено');}));
-    document.getElementById('saveBtn').addEventListener('click',saveSet);
+
+    // Profile functions
+    function updateProfile(){
+        document.getElementById('profileName').textContent=st.profile.name;
+        document.getElementById('profilePosition').textContent=st.profile.position;
+        document.getElementById('profileCompany').textContent=st.profile.company;
+        document.getElementById('workCompany').textContent=st.profile.company;
+        document.getElementById('workField').textContent=st.profile.field;
+        document.getElementById('workSite').textContent=st.profile.site;
+        document.getElementById('workPosition').textContent=st.profile.position;
+        document.getElementById('workExp').textContent=st.profile.experience;
+        document.getElementById('workTabNum').textContent=st.profile.tabNum;
+        document.getElementById('mottoText').textContent=st.profile.motto;
+        
+        if(st.profile.photo){
+            document.getElementById('photoImg').src=st.profile.photo;
+            document.getElementById('photoImg').style.display='block';
+            document.getElementById('photoPlaceholder').style.display='none';
+        }else{
+            document.getElementById('photoImg').style.display='none';
+            document.getElementById('photoPlaceholder').style.display='flex';
+        }
+        
+        document.querySelectorAll('.color-opt').forEach(opt=>{
+            opt.classList.toggle('active',opt.dataset.color===st.profile.color);
+        });
+        
+        const allTime={workDays:0,hours:0,net:0};
+        for(let y=2025;y<=2026;y++){
+            for(let m=1;m<=12;m++){
+                if(!sch[y]||!sch[y][m])continue;
+                for(let d=1;d<=31;d++){
+                    const s=getSt(y,m,d);
+                    if(s==='vm'){
+                        allTime.workDays++;
+                        const day=calcDay(S.hours,false,st.withBonus);
+                        allTime.hours+=day.hrs;
+                        allTime.net+=day.net;
+                    }else if(s==='holiday'){
+                        allTime.workDays++;
+                        const day=calcDay(S.hours,true,st.withBonus);
+                        allTime.hours+=day.hrs;
+                        allTime.net+=day.net;
+                    }else if(s==='road'){
+                        const day=calcRoad();
+                        allTime.hours+=day.hrs;
+                        allTime.net+=day.net;
+                    }
+                }
+            }
+        }
+        
+        document.getElementById('totalEarned').textContent=fmt(allTime.net)+'₽';
+        document.getElementById('totalDays').textContent=allTime.workDays;
+        document.getElementById('totalHours').textContent=Math.round(allTime.hours)+'ч';
+        document.getElementById('avgDay').textContent=allTime.workDays>0?fmt(allTime.net/allTime.workDays)+'₽':'0₽';
+        
+        const monthsData={};
+        for(let y=2025;y<=2026;y++){
+            for(let m=1;m<=12;m++){
+                if(!sch[y]||!sch[y][m])continue;
+                const key=`${y}-${m}`;
+                monthsData[key]={y,m,net:0};
+                for(let d=1;d<=31;d++){
+                    const s=getSt(y,m,d);
+                    if(s==='vm'){
+                        const day=calcDay(S.hours,false,st.withBonus);
+                        monthsData[key].net+=day.net;
+                    }else if(s==='holiday'){
+                        const day=calcDay(S.hours,true,st.withBonus);
+                        monthsData[key].net+=day.net;
+                    }else if(s==='road'){
+                        monthsData[key].net+=calcRoad().net;
+                    }
+                }
+            }
+        }
+        
+        let monthsHtml='';
+        Object.entries(monthsData).reverse().slice(0,6).forEach(([key,data])=>{
+            if(data.net>0){
+                monthsHtml+=`<div class="month-row">
+                    <span class="month-name">${MO[data.m-1]} ${data.y}</span>
+                    <span class="month-amount">${fmt(data.net)}₽</span>
+                </div>`;
+            }
+        });
+        document.getElementById('monthsStats').innerHTML=monthsHtml||'<p style="color:var(--muted);text-align:center;padding:12px">Нет данных</p>';
+    }
+
+    document.getElementById('photoEdit').addEventListener('click',()=>{
+        document.getElementById('photoInput').click();
+    });
+
+    document.getElementById('photoInput').addEventListener('change',function(e){
+        const file=e.target.files[0];
+        if(file){
+            const reader=new FileReader();
+            reader.onload=function(event){
+                st.profile.photo=event.target.result;
+                triggerAutoSave();
+                updateProfile();
+                toast('✅ Фото загружено');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    document.getElementById('editWork').addEventListener('click',()=>{
+        const company=prompt('Компания:',st.profile.company);
+        if(company===null)return;
+        const field=prompt('Филиал:',st.profile.field);
+        if(field===null)return;
+        const site=prompt('Участок:',st.profile.site);
+        if(site===null)return;
+        const position=prompt('Должность:',st.profile.position);
+        if(position===null)return;
+        const experience=prompt('Опыт работы:',st.profile.experience);
+        if(experience===null)return;
+        const tabNum=prompt('Табельный номер:',st.profile.tabNum);
+        if(tabNum===null)return;
+        
+        st.profile.company=company.trim()||st.profile.company;
+        st.profile.field=field.trim()||st.profile.field;
+        st.profile.site=site.trim()||st.profile.site;
+        st.profile.position=position.trim()||st.profile.position;
+        st.profile.experience=experience.trim()||st.profile.experience;
+        st.profile.tabNum=tabNum.trim()||st.profile.tabNum;
+        
+        const name=prompt('Ваше имя:',st.profile.name);
+        if(name&&name.trim()){
+            st.profile.name=name.trim();
+        }
+        
+        triggerAutoSave();
+        updateProfile();
+        toast('✅ Данные обновлены');
+    });
+
+    document.getElementById('editMotto').addEventListener('click',()=>{
+        const motto=prompt('Ваш девиз:',st.profile.motto);
+        if(motto&&motto.trim()){
+            st.profile.motto=motto.trim();
+            triggerAutoSave();
+            updateProfile();
+            toast('✅ Девиз изменён');
+        }
+    });
+
+    document.querySelectorAll('.color-opt').forEach(opt=>{
+        opt.addEventListener('click',function(){
+            st.profile.color=this.dataset.color;
+            document.documentElement.style.setProperty('--accent',st.profile.color);
+            triggerAutoSave();
+            updateProfile();
+            toast('🎨 Цвет изменён');
+        });
+    });
+
+    document.getElementById('customColor').addEventListener('input',function(){
+        st.profile.color=this.value;
+        document.documentElement.style.setProperty('--accent',this.value);
+        document.querySelectorAll('.color-opt').forEach(o=>o.classList.remove('active'));
+        triggerAutoSave();
+    });
+
+    document.getElementById('exportData').addEventListener('click',()=>{
+        const data={schedule:sch,settings:S,profile:st.profile};
+        const json=JSON.stringify(data,null,2);
+        const blob=new Blob([json],{type:'application/json'});
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement('a');
+        a.href=url;
+        a.download=`vahta-backup-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        toast('📥 Данные экспортированы');
+    });
+
+    document.getElementById('resetStats').addEventListener('click',()=>{
+        if(confirm('Сбросить всю статистику? Это действие нельзя отменить!')){
+            if(confirm('Вы уверены? Все данные будут удалены!')){
+                localStorage.clear();
+                location.reload();
+            }
+        }
+    });
+
+    document.getElementById('shareProfile').addEventListener('click',()=>{
+        const allTime={workDays:0,net:0};
+        for(let y=2025;y<=2026;y++){
+            for(let m=1;m<=12;m++){
+                if(!sch[y]||!sch[y][m])continue;
+                for(let d=1;d<=31;d++){
+                    const s=getSt(y,m,d);
+                    if(s==='vm'||s==='holiday'){
+                        allTime.workDays++;
+                        const day=calcDay(S.hours,s==='holiday',st.withBonus);
+                        allTime.net+=day.net;
+                    }else if(s==='road'){
+                        allTime.net+=calcRoad().net;
+                    }
+                }
+            }
+        }
+        const text=`💰 Вахта Live - Мой профиль\n\n👤 ${st.profile.name}\n🏢 ${st.profile.company}\n📍 ${st.profile.field}\n💼 ${st.profile.position}\n\n📅 Дней: ${allTime.workDays}\n💰 Заработано: ${fmt(allTime.net)}₽\n\n💭 "${st.profile.motto}"\n\n⛏️ Точность в работе!`;
+        if(navigator.share){
+            navigator.share({title:'Мой профиль Вахта Live',text});
+        }else{
+            navigator.clipboard.writeText(text);
+            toast('📋 Скопировано в буфер');
+        }
+    });
 
     function init(){
         loadSch();loadSet();loadState();
         const savedTheme=localStorage.getItem('vtheme')||'dark';
         setTheme(savedTheme);
+        if(st.profile.color){
+            document.documentElement.style.setProperty('--accent',st.profile.color);
+        }
         const now=new Date();st.calY=now.getFullYear();st.calM=now.getMonth();
         if(!isOnline)document.getElementById('offlineBadge').classList.add('show');
         updateLive();updateDayBk();renderCal();setInterval(updateLive,1000);
     }
-    document.addEventListener('DOMContentLoaded',init);
+    document.addEventListener('DOMContentLoaded',()=>{
+        if(!checkLogin()){
+            document.getElementById('loginPassword').focus();
+        }
+    });
 </script>
 ```
 
