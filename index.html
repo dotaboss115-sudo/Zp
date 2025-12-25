@@ -696,21 +696,12 @@
     const LB={vm:'ВМ',vo:'ВО',road:'Д',vacation:'ОТ',hospital:'Б',holiday:'⭐'};
     const DEF={hourly:187.94,hours:11,vahta:700,vahtaEx:100,region:70,percent:50,zone:10,exp:30,ndfl:13,roadH:8,bonus:17857};
     const PASSWORD='65420';
-    const APP_VERSION='2.2'; // New version - force cache clear
+    const APP_VERSION='2.3'; // Stable version - no auto clear
     
-    // FORCE clear old cache
-    (function(){
-        const savedVersion=localStorage.getItem('vversion');
-        if(savedVersion!==APP_VERSION){
-            console.log('🔄 Clearing old cache, version:',savedVersion,'→',APP_VERSION);
-            // Clear everything
-            const keys=Object.keys(localStorage);
-            keys.forEach(key=>localStorage.removeItem(key));
-            // Set new version
-            localStorage.setItem('vversion',APP_VERSION);
-            console.log('✅ Cache cleared! New version:',APP_VERSION);
-        }
-    })();
+    // Just check version, don't clear
+    if(!localStorage.getItem('vversion')){
+        localStorage.setItem('vversion',APP_VERSION);
+    }
     
     let S={...DEF},st={calY:2025,calM:11,selDay:null,period:'current',withBonus:true,theme:'dark',profile:{name:'Иванов Дмитрий Вячеславович',photo:'',company:'ООО ИК СИБИНТЕК',field:'Филиал «Макрорегион Восточная Сибирь»',site:'Участок метрологии',position:'Техник',experience:'3 года',motto:'Точность — залог успеха!',color:'#00ff88',tabNum:'г000-42454'}},sch={};
     let autoSaveTimer=null;
@@ -816,6 +807,11 @@
 
     function saveState(){
         localStorage.setItem('vstate',JSON.stringify(st));
+        // CRITICAL: Save photo separately as backup
+        if(st.profile&&st.profile.photo){
+            localStorage.setItem('vphoto',st.profile.photo);
+            console.log('📸 Photo saved to backup');
+        }
     }
 
     function loadState(){
@@ -827,6 +823,12 @@
                 // Ensure profile exists with defaults
                 if(!st.profile){
                     st.profile={name:'Иванов Дмитрий Вячеславович',photo:'',company:'ООО ИК СИБИНТЕК',field:'Филиал «Макрорегион Восточная Сибирь»',site:'Участок метрологии',position:'Техник',experience:'3 года',motto:'Точность — залог успеха!',color:'#00ff88',tabNum:'г000-42454'};
+                }
+                // CRITICAL: Restore photo from backup if missing
+                const savedPhoto=localStorage.getItem('vphoto');
+                if(savedPhoto&&(!st.profile.photo||st.profile.photo==='')){
+                    st.profile.photo=savedPhoto;
+                    console.log('📸 Photo restored from backup');
                 }
             }catch(e){console.log('State load error');}
         }
@@ -1067,12 +1069,15 @@
         const clearCacheBtn=document.getElementById('clearCacheBtn');
         if(clearCacheBtn){
             clearCacheBtn.addEventListener('click',()=>{
-                if(confirm('🗑️ Очистить весь кеш?\n\n⚠️ Это удалит:\n• Сохранённое расписание\n• Настройки\n• Фото профиля\n• Все данные\n\nВы уверены?')){
-                    const keys=Object.keys(localStorage);
-                    keys.forEach(key=>{
-                        if(key!=='vlogin')localStorage.removeItem(key);
-                    });
-                    toast('🗑️ Кеш очищен!');
+                if(confirm('🗑️ Очистить кеш?\n\n⚠️ Удалит:\n• Расписание\n• Настройки\n\n✅ Сохранит:\n• Фото\n• Логин\n\nПродолжить?')){
+                    const login=localStorage.getItem('vlogin');
+                    const photo=localStorage.getItem('vphoto');
+                    const version=localStorage.getItem('vversion');
+                    localStorage.clear();
+                    if(login)localStorage.setItem('vlogin',login);
+                    if(photo)localStorage.setItem('vphoto',photo);
+                    if(version)localStorage.setItem('vversion',version);
+                    toast('🗑️ Очищено! Фото сохранено!');
                     setTimeout(()=>location.reload(),1000);
                 }
             });
@@ -1198,9 +1203,12 @@
             const reader=new FileReader();
             reader.onload=function(event){
                 st.profile.photo=event.target.result;
-                triggerAutoSave();
+                // CRITICAL: Save photo immediately to both locations
+                localStorage.setItem('vphoto',event.target.result);
+                saveState(); // This will also save to vstate
                 updateProfile();
-                toast('✅ Фото загружено');
+                console.log('📸 Photo saved! Size:',event.target.result.length,'bytes');
+                toast('✅ Фото загружено и сохранено');
             };
             reader.readAsDataURL(file);
         }
