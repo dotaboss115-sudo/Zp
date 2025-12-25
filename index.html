@@ -58,7 +58,9 @@
     .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all .5s ease,transform .2s ease}
     .logo-icon:active{transform:scale(.9) rotate(5deg)}
     .logo-text{font-size:1.2rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;transition:all .5s ease}
-    .badge{font-size:.6rem;padding:4px 8px;background:rgba(0,255,136,.15);color:var(--accent);border-radius:6px;font-weight:600;transition:all .3s ease;animation:badgePulse 2s ease-in-out infinite}
+    .badge{font-size:.6rem;padding:4px 8px;background:rgba(0,255,136,.15);color:var(--accent);border-radius:6px;font-weight:600;transition:all .3s ease;animation:badgePulse 2s ease-in-out infinite;display:flex;align-items:center;gap:5px}
+    .network-status-dot{width:6px;height:6px;border-radius:50%;background:#00ff88;box-shadow:0 0 6px #00ff88;animation:pulse 2s ease-in-out infinite;flex-shrink:0}
+    .network-status-dot.offline{background:#ff453a;box-shadow:0 0 6px #ff453a;animation:none}
     @keyframes badgePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
     .theme-btn{width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer;transition:all .3s ease}
     .theme-btn:active{transform:scale(.85) rotate(180deg)}
@@ -245,8 +247,16 @@
     .save-indicator.show{opacity:1;animation:saveFlash .5s ease}
     @keyframes saveFlash{0%,100%{opacity:1}50%{opacity:.7}}
     
-    .offline-badge{position:fixed;top:calc(60px + env(safe-area-inset-top) + 10px);left:16px;background:#ff453a;color:#fff;border-radius:8px;padding:6px 12px;font-size:.65rem;font-weight:600;opacity:0;transition:all .3s ease;pointer-events:none;z-index:60}
-    .offline-badge.show{opacity:1}
+    .network-indicator{position:fixed;top:calc(68px + env(safe-area-inset-top));left:16px;z-index:50;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:6px 12px;font-size:.65rem;font-weight:600;display:flex;align-items:center;gap:6px;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:all .3s ease}
+    .network-dot{width:6px;height:6px;border-radius:50%;background:#00ff88;box-shadow:0 0 6px #00ff88;animation:pulse 2s ease-in-out infinite}
+    .network-indicator.offline .network-dot{background:#ff453a;box-shadow:0 0 8px #ff453a;animation:none}
+    .network-indicator.offline .network-text{color:#ff453a}
+    .network-text{color:var(--text2)}
+    .network-indicator.offline{border-color:#ff453a}
+    [data-theme="rosneft"] .network-dot{background:#ffd700;box-shadow:0 0 8px #ffd700}
+    [data-theme="rosneft"] .network-indicator.offline .network-dot{background:#ff453a;box-shadow:0 0 8px #ff453a}
+    [data-theme="rosneft"] .network-status-dot{background:#ffd700;box-shadow:0 0 6px #ffd700}
+    [data-theme="rosneft"] .network-status-dot.offline{background:#ff453a;box-shadow:0 0 6px #ff453a}
     
     .login-screen{position:fixed;top:0;left:0;right:0;bottom:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:var(--bg)}
     .login-container{position:relative;z-index:2;width:90%;max-width:400px;animation:fadeIn .8s ease}
@@ -343,14 +353,20 @@
             <span class="logo-text">Вахта Live</span>
         </div>
         <div style="display:flex;gap:8px;align-items:center">
-            <span class="badge" id="badge">LIVE</span>
+            <span class="badge" id="badge">
+                <span class="network-status-dot" id="networkStatusDot"></span>
+                LIVE
+            </span>
             <div class="theme-btn" id="themeBtn">🎨</div>
         </div>
     </header>
 
 ```
 <div class="save-indicator" id="saveInd">💾 Сохранено</div>
-<div class="offline-badge" id="offlineBadge">📵 Офлайн режим</div>
+<div class="network-indicator" id="networkInd">
+    <div class="network-dot"></div>
+    <span class="network-text">Онлайн</span>
+</div>
 
 <!-- Login Screen -->
 <div class="login-screen" id="loginScreen">
@@ -643,6 +659,7 @@
         </div>
         <div class="set-section">
             <div class="set-title">🔐 Безопасность</div>
+            <button class="save-btn" id="clearCacheBtn" style="background:linear-gradient(135deg,#ff9500,#ffb340);margin-bottom:10px">🗑️ Очистить кеш</button>
             <button class="save-btn" id="logoutBtn" style="background:linear-gradient(135deg,var(--red),#ff6b6b);margin-top:0">🚪 Выйти из аккаунта</button>
         </div>
         <button class="save-btn" id="saveBtn">💾 Сохранить</button>
@@ -679,15 +696,21 @@
     const LB={vm:'ВМ',vo:'ВО',road:'Д',vacation:'ОТ',hospital:'Б',holiday:'⭐'};
     const DEF={hourly:187.94,hours:11,vahta:700,vahtaEx:100,region:70,percent:50,zone:10,exp:30,ndfl:13,roadH:8,bonus:17857};
     const PASSWORD='65420';
-    const APP_VERSION='2.1'; // New version with login
+    const APP_VERSION='2.2'; // New version - force cache clear
     
-    // Clear old cache if version changed
-    const savedVersion=localStorage.getItem('vversion');
-    if(savedVersion!==APP_VERSION){
-        console.log('New version detected, clearing all cache...');
-        localStorage.clear();
-        localStorage.setItem('vversion',APP_VERSION);
-    }
+    // FORCE clear old cache
+    (function(){
+        const savedVersion=localStorage.getItem('vversion');
+        if(savedVersion!==APP_VERSION){
+            console.log('🔄 Clearing old cache, version:',savedVersion,'→',APP_VERSION);
+            // Clear everything
+            const keys=Object.keys(localStorage);
+            keys.forEach(key=>localStorage.removeItem(key));
+            // Set new version
+            localStorage.setItem('vversion',APP_VERSION);
+            console.log('✅ Cache cleared! New version:',APP_VERSION);
+        }
+    })();
     
     let S={...DEF},st={calY:2025,calM:11,selDay:null,period:'current',withBonus:true,theme:'dark',profile:{name:'Иванов Дмитрий Вячеславович',photo:'',company:'ООО ИК СИБИНТЕК',field:'Филиал «Макрорегион Восточная Сибирь»',site:'Участок метрологии',position:'Техник',experience:'3 года',motto:'Точность — залог успеха!',color:'#00ff88',tabNum:'г000-42454'}},sch={};
     let autoSaveTimer=null;
@@ -742,14 +765,38 @@
     // Online/Offline detection (Service Worker removed for security)
     window.addEventListener('online',()=>{
         isOnline=true;
-        document.getElementById('offlineBadge').classList.remove('show');
+        updateNetworkIndicator();
         toast('✅ Подключено к сети');
     });
     window.addEventListener('offline',()=>{
         isOnline=false;
-        document.getElementById('offlineBadge').classList.add('show');
+        updateNetworkIndicator();
         toast('📵 Офлайн режим');
     });
+    
+    function updateNetworkIndicator(){
+        const indicator=document.getElementById('networkInd');
+        const statusDot=document.getElementById('networkStatusDot');
+        
+        if(indicator){
+            const text=indicator.querySelector('.network-text');
+            if(isOnline){
+                indicator.classList.remove('offline');
+                text.textContent='Онлайн';
+            }else{
+                indicator.classList.add('offline');
+                text.textContent='Офлайн';
+            }
+        }
+        
+        if(statusDot){
+            if(isOnline){
+                statusDot.classList.remove('offline');
+            }else{
+                statusDot.classList.add('offline');
+            }
+        }
+    }
 
     // Auto-save with debounce
     function triggerAutoSave(){
@@ -776,7 +823,11 @@
         if(saved){
             try{
                 const loaded=JSON.parse(saved);
-                st={...st,...loaded};
+                Object.assign(st,loaded);
+                // Ensure profile exists with defaults
+                if(!st.profile){
+                    st.profile={name:'Иванов Дмитрий Вячеславович',photo:'',company:'ООО ИК СИБИНТЕК',field:'Филиал «Макрорегион Восточная Сибирь»',site:'Участок метрологии',position:'Техник',experience:'3 года',motto:'Точность — залог успеха!',color:'#00ff88',tabNum:'г000-42454'};
+                }
             }catch(e){console.log('State load error');}
         }
     }
@@ -1009,6 +1060,20 @@
                 if(confirm('Выйти из аккаунта?')){
                     localStorage.removeItem('vlogin');
                     location.reload();
+                }
+            });
+        }
+        
+        const clearCacheBtn=document.getElementById('clearCacheBtn');
+        if(clearCacheBtn){
+            clearCacheBtn.addEventListener('click',()=>{
+                if(confirm('🗑️ Очистить весь кеш?\n\n⚠️ Это удалит:\n• Сохранённое расписание\n• Настройки\n• Фото профиля\n• Все данные\n\nВы уверены?')){
+                    const keys=Object.keys(localStorage);
+                    keys.forEach(key=>{
+                        if(key!=='vlogin')localStorage.removeItem(key);
+                    });
+                    toast('🗑️ Кеш очищен!');
+                    setTimeout(()=>location.reload(),1000);
                 }
             });
         }
@@ -1255,7 +1320,7 @@
             document.documentElement.style.setProperty('--accent',st.profile.color);
         }
         const now=new Date();st.calY=now.getFullYear();st.calM=now.getMonth();
-        if(!isOnline)document.getElementById('offlineBadge').classList.add('show');
+        updateNetworkIndicator();
         updateLive();updateDayBk();renderCal();setInterval(updateLive,1000);
     }
     document.addEventListener('DOMContentLoaded',()=>{
