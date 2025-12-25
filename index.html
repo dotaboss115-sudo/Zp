@@ -365,7 +365,7 @@
 <div class="save-indicator" id="saveInd">💾 Сохранено</div>
 <div class="network-indicator" id="networkInd">
     <div class="network-dot"></div>
-    <span class="network-text">Онлайн</span>
+    <span class="network-text">Проверка...</span>
 </div>
 
 <!-- Login Screen -->
@@ -707,6 +707,9 @@
     let autoSaveTimer=null;
     let isOnline=navigator.onLine;
     let isLoggedIn=false;
+    
+    // Log initial network status
+    console.log('🌐 Network status on load:', isOnline ? '✅ Online' : '❌ Offline');
 
     // Login system
     function checkLogin(){
@@ -724,6 +727,8 @@
         document.getElementById('mainHeader').style.display='flex';
         document.getElementById('mainApp').style.display='block';
         document.getElementById('mainNav').style.display='flex';
+        // Update network status immediately
+        setTimeout(updateNetworkIndicator, 100);
         init();
     }
 
@@ -768,6 +773,8 @@
     function updateNetworkIndicator(){
         const indicator=document.getElementById('networkInd');
         const statusDot=document.getElementById('networkStatusDot');
+        
+        console.log('📡 Updating network indicator:', isOnline ? '✅ Online' : '❌ Offline');
         
         if(indicator){
             const text=indicator.querySelector('.network-text');
@@ -1332,6 +1339,8 @@
         updateLive();updateDayBk();renderCal();setInterval(updateLive,1000);
     }
     document.addEventListener('DOMContentLoaded',()=>{
+        // Update network status on page load
+        console.log('🌐 Checking network on DOM load:', navigator.onLine);
         if(!checkLogin()){
             document.getElementById('loginPassword').focus();
         }
