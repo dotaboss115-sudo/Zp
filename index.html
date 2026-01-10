@@ -2185,6 +2185,7 @@
             if(st.calM<0){st.calM=11;st.calY--;}
             if(st.calY<2025){st.calY=2025;st.calM=0;}
             renderCal();
+            updateLive(); // Update live stats when month changes
             // Recalculate stats for new month if in 'month' mode
             if(st.period==='month'){
                 updatePeriodStats();
@@ -2195,6 +2196,7 @@
             if(st.calM>11){st.calM=0;st.calY++;}
             if(st.calY>2027){st.calY=2027;st.calM=11;}
             renderCal();
+            updateLive(); // Update live stats when month changes
             // Recalculate stats for new month if in 'month' mode
             if(st.period==='month'){
                 updatePeriodStats();
@@ -2425,16 +2427,22 @@
         // 🎯 COUNTDOWN TO END
         function updateCountdown(){
             const vahta=findVahta();
-            const today=new Date();
+            const now=new Date();
+            // Get start of today (00:00:00)
+            const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
             const todayStatus=getSt(today.getFullYear(),today.getMonth()+1,today.getDate());
             const isWorkDay=todayStatus==='vm'||todayStatus==='road'||todayStatus==='holiday';
             
             if(isWorkDay&&vahta.end){
-                const daysLeft=Math.ceil((vahta.end-today)/86400000);
+                // Days until end of vahta (from start of today to end date)
+                const endDate=new Date(vahta.end.getFullYear(),vahta.end.getMonth(),vahta.end.getDate());
+                const daysLeft=Math.floor((endDate-today)/86400000);
                 document.getElementById('countdownDays').textContent=daysLeft;
                 document.getElementById('countdownLabel').textContent=daysLeft===1?'день остался':'дней осталось';
             }else{
-                const daysUntil=Math.ceil((vahta.start-today)/86400000);
+                // Days until start of vahta
+                const startDate=new Date(vahta.start.getFullYear(),vahta.start.getMonth(),vahta.start.getDate());
+                const daysUntil=Math.floor((startDate-today)/86400000);
                 document.getElementById('countdownDays').textContent=daysUntil;
                 document.getElementById('countdownLabel').textContent='дней до начала';
             }
