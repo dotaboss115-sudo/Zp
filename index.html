@@ -12,6 +12,11 @@
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2300ff88'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='%23000'>💰</text></svg>">
     <meta name="theme-color" content="#000000">
     
+    <!-- Prevent caching -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <!-- PWA Manifest -->
     <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22%D0%92%D0%B0%D1%85%D1%82%D0%B0%22%2C%22short_name%22%3A%22%D0%92%D0%B0%D1%85%D1%82%D0%B0%22%2C%22description%22%3A%22%D0%A3%D1%87%D1%91%D1%82%20%D0%B2%D0%B0%D1%85%D1%82%D0%BE%D0%B2%D0%BE%D0%B9%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23000000%22%2C%22theme_color%22%3A%22%2300ff88%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20512%20512%27%3E%3Crect%20width%3D%27512%27%20height%3D%27512%27%20rx%3D%27100%27%20fill%3D%27%2300ff88%27%2F%3E%3Ctext%20x%3D%27256%27%20y%3D%27380%27%20font-size%3D%27300%27%20text-anchor%3D%27middle%27%20fill%3D%27%23000%27%3E%F0%9F%92%B0%3C%2Ftext%3E%3C%2Fsvg%3E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
     
@@ -127,7 +132,7 @@
         }
 
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-        html,body{font-family:'Unbounded',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .5s ease,color .3s ease}
+        html,body{font-family:'Unbounded',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .5s ease,color .3s ease;overflow-x:hidden;max-width:100vw;position:relative;touch-action:pan-y pinch-zoom}
         body{padding-bottom:calc(85px + env(safe-area-inset-bottom))}
         
         .header{position:sticky;top:0;z-index:50;background:rgba(0,0,0,.9);backdrop-filter:blur(20px);padding:12px 16px;padding-top:calc(12px + env(safe-area-inset-top));border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;transition:all .5s ease}
@@ -141,7 +146,7 @@
         @keyframes badgePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
         @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.2);opacity:.7}}
         
-        .container{padding:16px;animation:fadeIn .5s ease}
+        .container{padding:16px;animation:fadeIn .5s ease;max-width:100vw;overflow-x:hidden;box-sizing:border-box}
         @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
         @keyframes fadeOut{from{opacity:1}to{opacity:0}}
         
@@ -211,7 +216,7 @@
             100%{transform:translateY(-100vh) translateX(50px);opacity:0}
         }
 
-        .live-card{background:linear-gradient(180deg,var(--card),var(--bg2));border-radius:24px;padding:24px;margin-bottom:16px;border:1px solid var(--border);position:relative;overflow:hidden;transition:all .5s ease;animation:slideUp .6s ease;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+        .live-card{background:linear-gradient(180deg,var(--card),var(--bg2));border-radius:24px;padding:24px;margin-bottom:16px;border:1px solid var(--border);position:relative;overflow:hidden;transition:all .5s ease;animation:slideUp .6s ease;box-shadow:0 10px 40px rgba(0,0,0,.3);max-width:100%}
         .live-card:hover{transform:translateY(-5px);box-shadow:0 15px 50px rgba(0,0,0,.4),0 0 30px var(--glow)}
         @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
         .live-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--gold),var(--accent));background-size:200%;animation:grad 3s linear infinite}
@@ -251,16 +256,16 @@
         .shift-labels{display:flex;justify-content:space-between;margin-top:6px;font-size:.65rem;color:var(--muted)}
         
         .stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;animation:fadeIn .7s ease .2s backwards}
-        .stat3{background:var(--card);border-radius:16px;padding:14px 12px;text-align:center;border:1px solid var(--border);transition:all .3s ease,transform .2s ease;position:relative;overflow:hidden}
+        .stat3{background:var(--card);border-radius:16px;padding:18px 12px;text-align:center;border:1px solid var(--border);transition:all .3s ease,transform .2s ease;position:relative;overflow:hidden;min-height:80px;display:flex;flex-direction:column;justify-content:center}
         .stat3::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--accent),var(--gold));transform:scaleX(0);transition:transform .3s ease}
         .stat3:hover::before{transform:scaleX(1)}
         .stat3:hover{transform:translateY(-5px);box-shadow:0 10px 30px rgba(0,0,0,.4),0 0 20px var(--glow);border-color:var(--accent)}
         .stat3:active{transform:scale(.95)}
-        .stat3-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;margin-bottom:4px;transition:all .3s ease;text-shadow:0 0 10px var(--glow)}
+        .stat3-val{font-family:'JetBrains Mono',monospace;font-size:1.4rem;font-weight:700;margin-bottom:6px;transition:all .3s ease;text-shadow:0 0 10px var(--glow)}
         .stat3:hover .stat3-val{transform:scale(1.1);filter:brightness(1.3)}
-        .stat3-lbl{font-size:.6rem;color:var(--muted);text-transform:uppercase}
+        .stat3-lbl{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
         
-        .card{background:var(--card);border-radius:20px;padding:20px;margin-bottom:16px;border:1px solid var(--border);transition:all .5s ease;animation:fadeIn .8s ease .3s backwards}
+        .card{background:var(--card);border-radius:20px;padding:20px;margin-bottom:16px;border:1px solid var(--border);transition:all .5s ease;animation:fadeIn .8s ease .3s backwards;max-width:100%;overflow:hidden}
         .card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
         .card-title{font-size:.9rem;font-weight:600}
         .toggle-wrap{display:flex;gap:8px}
@@ -325,15 +330,15 @@
             color:var(--text2);
         }
         
-        .cal-section{background:var(--card);border-radius:20px;padding:16px;margin-bottom:16px;border:1px solid var(--border);transition:all .5s ease}
+        .cal-section{background:var(--card);border-radius:20px;padding:10px;margin-bottom:16px;border:1px solid var(--border);transition:all .5s ease;max-width:100%;overflow:hidden;width:100%}
         .cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-        .cal-btn{width:32px;height:32px;border-radius:8px;background:var(--bg2);border:1px solid var(--border);color:var(--text);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s ease}
+        .cal-btn{width:44px;height:44px;border-radius:10px;background:var(--bg2);border:1px solid var(--border);color:var(--text);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s ease}
         .cal-btn:active{background:var(--accent);color:var(--bg);transform:scale(.85)}
         .cal-title{font-size:.95rem;font-weight:600}
         .cal-wdays{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:8px}
         .cal-wd{text-align:center;font-size:.6rem;color:var(--muted);padding:8px 0;font-weight:500}
-        .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-        .cal-day{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;font-size:.8rem;font-weight:500;cursor:pointer;background:var(--bg2);border:2px solid transparent;transition:all .2s ease;position:relative}
+        .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;max-width:100%;overflow:hidden;width:100%}
+        .cal-day{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;background:var(--bg2);border:1px solid transparent;transition:all .2s ease;position:relative;padding:2px;max-width:100%}
         .cal-day::after{content:'';position:absolute;inset:0;border-radius:8px;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);opacity:0;transition:opacity .3s ease}
         .cal-day:hover::after{opacity:.3}
         .cal-day:hover{transform:scale(1.1);z-index:10;box-shadow:0 5px 20px rgba(0,0,0,.5)}
@@ -414,7 +419,7 @@
         
         .period-sel{display:flex;gap:8px;overflow-x:auto;padding:4px 0;margin-bottom:16px}
         .period-sel::-webkit-scrollbar{display:none}
-        .period-btn{flex-shrink:0;padding:10px 14px;border-radius:10px;background:var(--card);border:1px solid var(--border);color:var(--text2);font-size:.7rem;font-weight:500;cursor:pointer;font-family:'Unbounded',sans-serif;transition:all .3s ease}
+        .period-btn{flex-shrink:0;padding:12px 16px;border-radius:12px;background:var(--card);border:1px solid var(--border);color:var(--text2);font-size:.75rem;font-weight:600;cursor:pointer;font-family:'Unbounded',sans-serif;transition:all .3s ease;min-height:44px;display:flex;align-items:center;justify-content:center}
         .period-btn:active{transform:scale(.95)}
         .period-btn.active{background:var(--accent);color:var(--bg);border-color:var(--accent)}
         
@@ -525,19 +530,21 @@
         /* 💰 SELECTION CALCULATOR PANEL */
         .selection-calc{
             position:fixed;
-            bottom:calc(85px + env(safe-area-inset-bottom));
-            left:16px;
-            right:16px;
+            top:calc(60px + env(safe-area-inset-top));
+            bottom:auto;
+            left:12px;
+            right:12px;
+            max-width:600px;
+            margin:0 auto;
             background:linear-gradient(135deg, rgba(0,212,255,.15) 0%, rgba(0,0,0,.95) 100%);
             backdrop-filter:blur(20px);
-            border-radius:20px;
-            padding:16px;
+            border-radius:14px;
+            padding:10px;
             border:1px solid rgba(0,212,255,.3);
             box-shadow:0 0 30px rgba(0,212,255,.4), 0 10px 40px rgba(0,0,0,.8);
-            z-index:100;
-            transform:translateY(200%);
+            z-index:1000;
+            transform:translateY(-200%);
             transition:transform .4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            animation:glow 3s ease-in-out infinite;
         }
         
         .selection-calc.show{
@@ -583,8 +590,8 @@
         .selection-calc-stats{
             display:grid;
             grid-template-columns:repeat(3,1fr);
-            gap:8px;
-            margin-bottom:12px;
+            gap:6px;
+            margin-bottom:8px;
         }
         
         .selection-stat{
@@ -597,23 +604,23 @@
         
         .selection-stat-val{
             font-family:'JetBrains Mono',monospace;
-            font-size:1.1rem;
+            font-size:.95rem;
             font-weight:700;
             color:var(--accent);
             text-shadow:0 0 10px var(--glow);
         }
         
         .selection-stat-lbl{
-            font-size:.6rem;
+            font-size:.55rem;
             color:var(--muted);
             text-transform:uppercase;
-            margin-top:4px;
+            margin-top:2px;
         }
         
         .selection-calc-money{
             background:rgba(0,212,255,.15);
-            border-radius:16px;
-            padding:16px;
+            border-radius:12px;
+            padding:10px;
             text-align:center;
             border:1px solid rgba(0,212,255,.3);
             position:relative;
@@ -642,7 +649,7 @@
         
         .selection-calc-money-amount{
             font-family:'JetBrains Mono',monospace;
-            font-size:2rem;
+            font-size:1.4rem;
             font-weight:700;
             background:linear-gradient(135deg, #00d4ff 0%, #00ffaa 50%, #00d4ff 100%);
             -webkit-background-clip:text;
@@ -858,6 +865,8 @@
             padding:16px;
             margin-bottom:16px;
             border:1px solid var(--border);
+            max-width:100%;
+            overflow:hidden;
         }
         
         .chart-title{
@@ -1231,9 +1240,14 @@
             </div>
             
             <!-- 📊 Earnings Chart -->
-            <div class="chart-container">
-                <div class="chart-title">📊 График заработка по месяцам</div>
-                <canvas id="earningsChart" class="chart-canvas"></canvas>
+            <div class="card">
+                <div class="card-head" style="cursor:pointer" id="chartToggle">
+                    <span class="card-title">📊 График заработка (6 мес)</span>
+                    <button class="edit-mini-btn" id="chartToggleBtn">👁️</button>
+                </div>
+                <div id="chartWrapper" style="display:none;padding-top:12px">
+                    <canvas id="earningsChart" class="chart-canvas"></canvas>
+                </div>
             </div>
         </div>
 
@@ -1647,7 +1661,12 @@
         }
 
         function saveState(){
-            localStorage.setItem('vstate',JSON.stringify(st));
+            const stateToSave={...st};
+            // Convert Set to Array for JSON
+            if(stateToSave.selectedDays instanceof Set){
+                stateToSave.selectedDays=Array.from(stateToSave.selectedDays);
+            }
+            localStorage.setItem('vstate',JSON.stringify(stateToSave));
             if(st.profile&&st.profile.photo){
                 localStorage.setItem('vphoto',st.profile.photo);
             }
@@ -1659,6 +1678,20 @@
                 try{
                     const loaded=JSON.parse(saved);
                     Object.assign(st,loaded);
+                    
+                    // Restore Set for selectedDays
+                    if(st.selectedDays&&!(st.selectedDays instanceof Set)){
+                        st.selectedDays=new Set(Array.isArray(st.selectedDays)?st.selectedDays:Object.values(st.selectedDays));
+                    }
+                    if(!st.selectedDays){
+                        st.selectedDays=new Set();
+                    }
+                    
+                    // Ensure goals array exists
+                    if(!st.goals||!Array.isArray(st.goals)){
+                        st.goals=[];
+                    }
+                    
                     if(!st.profile){
                         st.profile={name:'Иванов Дмитрий Вячеславович',photo:'',company:'ООО ИК СИБИНТЕК',field:'Филиал «Макрорегион Восточная Сибирь»',site:'Участок метрологии',position:'Техник',experience:'3 года',motto:'Точность — залог успеха!',color:'#00ff88',tabNum:'г000-77777'};
                     }
@@ -2574,6 +2607,22 @@
         
         // 📊 EARNINGS CHART
         let earningsChart=null;
+        let chartVisible=false;
+        
+        function toggleChart(){
+            chartVisible=!chartVisible;
+            const wrapper=document.getElementById('chartWrapper');
+            const btn=document.getElementById('chartToggleBtn');
+            
+            if(chartVisible){
+                wrapper.style.display='block';
+                btn.textContent='🙈';
+                setTimeout(renderEarningsChart,100);
+            }else{
+                wrapper.style.display='none';
+                btn.textContent='👁️';
+            }
+        }
         
         function renderEarningsChart(){
             const canvas=document.getElementById('earningsChart');
@@ -2581,12 +2630,12 @@
             
             const ctx=canvas.getContext('2d');
             
-            // Calculate earnings for last 12 months
+            // Calculate earnings for last 6 months (better for mobile)
             const data=[];
             const labels=[];
             const now=new Date();
             
-            for(let i=11;i>=0;i--){
+            for(let i=5;i>=0;i--){
                 const date=new Date(now.getFullYear(),now.getMonth()-i,1);
                 const monthStart=new Date(date.getFullYear(),date.getMonth(),1);
                 const monthEnd=new Date(date.getFullYear(),date.getMonth()+1,0);
@@ -2596,14 +2645,17 @@
                 labels.push(MO[date.getMonth()].substring(0,3));
             }
             
-            // Simple bar chart
-            canvas.width=canvas.offsetWidth;
-            canvas.height=250;
+            // Responsive canvas sizing
+            const containerWidth=canvas.parentElement.offsetWidth;
+            canvas.width=containerWidth;
+            canvas.height=220;
             
-            const padding=40;
+            const padding=20;
+            const paddingBottom=40;
             const chartWidth=canvas.width-padding*2;
-            const chartHeight=canvas.height-padding*2;
-            const barWidth=chartWidth/data.length-10;
+            const chartHeight=canvas.height-padding-paddingBottom;
+            const barWidth=Math.min((chartWidth/data.length)-12, 60);
+            const barSpacing=(chartWidth-barWidth*data.length)/(data.length+1);
             const maxValue=Math.max(...data)||1;
             
             // Clear canvas
@@ -2612,7 +2664,7 @@
             // Draw bars
             data.forEach((value,i)=>{
                 const barHeight=(value/maxValue)*chartHeight;
-                const x=padding+(barWidth+10)*i;
+                const x=padding+barSpacing+(barWidth+barSpacing)*i;
                 const y=padding+chartHeight-barHeight;
                 
                 // Gradient
@@ -2621,27 +2673,44 @@
                 gradient.addColorStop(1,getComputedStyle(document.documentElement).getPropertyValue('--blue').trim());
                 
                 ctx.fillStyle=gradient;
-                ctx.fillRect(x,y,barWidth,barHeight);
+                ctx.roundRect(x,y,barWidth,barHeight,6);
+                ctx.fill();
                 
-                // Label
+                // Label (month name)
                 ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
-                ctx.font='10px Unbounded';
+                ctx.font='11px Unbounded';
                 ctx.textAlign='center';
-                ctx.fillText(labels[i],x+barWidth/2,canvas.height-padding+15);
+                ctx.fillText(labels[i],x+barWidth/2,canvas.height-paddingBottom+20);
                 
                 // Value - show for all non-zero values
                 if(value>0){
                     ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--text2').trim();
-                    ctx.font='bold 9px JetBrains Mono';
+                    ctx.font='bold 10px JetBrains Mono';
+                    ctx.textAlign='center';
                     
-                    // If bar is too short, show value above, otherwise show inside near top
-                    if(barHeight<30){
-                        ctx.fillText(fmt(value)+'₽',x+barWidth/2,y-5);
-                    }else{
-                        ctx.fillText(fmt(value)+'₽',x+barWidth/2,y+12);
-                    }
+                    const valueText=value>=1000?Math.round(value/1000)+'k':value;
+                    
+                    // Always show value above bar
+                    ctx.fillText(valueText+'₽',x+barWidth/2,y-8);
                 }
             });
+            
+            // Add roundRect polyfill for older browsers
+            if(!ctx.roundRect){
+                ctx.roundRect=function(x,y,w,h,r){
+                    this.beginPath();
+                    this.moveTo(x+r,y);
+                    this.lineTo(x+w-r,y);
+                    this.arcTo(x+w,y,x+w,y+r,r);
+                    this.lineTo(x+w,y+h-r);
+                    this.arcTo(x+w,y+h,x+w-r,y+h,r);
+                    this.lineTo(x+r,y+h);
+                    this.arcTo(x,y+h,x,y+h-r,r);
+                    this.lineTo(x,y+r);
+                    this.arcTo(x,y,x+r,y,r);
+                    this.closePath();
+                };
+            }
         }
         
         function init(){
@@ -2663,13 +2732,19 @@
             updateCountdown();
             renderGoals();
             checkNotifications();
-            renderEarningsChart();
+            // renderEarningsChart(); // Chart hidden by default, renders on toggle
             
             // Generate particles
             generateParticles();
             
             setInterval(updateLive,1000);
             setInterval(updateCountdown,60000); // Update countdown every minute
+            
+            // Redraw chart on resize/orientation change
+            window.addEventListener('resize',()=>{
+                clearTimeout(window.resizeTimer);
+                window.resizeTimer=setTimeout(renderEarningsChart,250);
+            });
         }
         
         document.addEventListener('DOMContentLoaded',()=>{
@@ -2691,6 +2766,13 @@
             document.getElementById('closeGoalModal')?.addEventListener('click',closeGoalModal);
             document.getElementById('cancelGoal')?.addEventListener('click',closeGoalModal);
             document.getElementById('saveGoal')?.addEventListener('click',saveGoal);
+            
+            // Chart toggle
+            document.getElementById('chartToggle')?.addEventListener('click',toggleChart);
+            document.getElementById('chartToggleBtn')?.addEventListener('click',(e)=>{
+                e.stopPropagation();
+                toggleChart();
+            });
             
             // Close modal on outside click
             document.getElementById('goalModal')?.addEventListener('click',e=>{
